@@ -1,929 +1,1229 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="UTF-8">
 
-  <title>قراءة الفصل | Sakura Tales</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>قراءة الفصل | Sakura Tales</title>
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #fff;
-    }
+<style>
 
-    body {
-      min-height: 100vh;
-      padding-bottom: 75px;
-      font-family: Arial, sans-serif;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    /* الشريط العلوي */
-    .top-bar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#000;
+  color:white;
+}
 
-      height: 58px;
-      padding: 0 12px;
+body{
+  min-height:100vh;
+  padding-bottom:70px;
+  font-family:Arial,sans-serif;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+/* الشريط العلوي */
 
-      background: rgba(0, 0, 0, 0.92);
-      border-bottom: 1px solid #333;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+.top-bar{
+  position:sticky;
+  top:0;
+  z-index:1000;
 
-      backdrop-filter: blur(10px);
-    }
+  height:58px;
+  padding:0 12px;
 
-    .top-title {
-      flex: 1;
-      min-width: 0;
-      text-align: center;
-    }
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
 
-    .manga-name {
-      font-size: 14px;
-      font-weight: bold;
-      color: #ffd1e4;
+  background:rgba(0,0,0,.94);
+  border-bottom:1px solid #333;
 
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  backdrop-filter:blur(10px);
+}
 
-    .chapter-name {
-      margin-top: 3px;
-      font-size: 12px;
-      color: #c9aeb9;
-    }
+.top-title{
+  flex:1;
+  min-width:0;
+  text-align:center;
+}
 
-    .top-btn {
-      width: 40px;
-      height: 40px;
+.manga-name{
+  font-size:14px;
+  font-weight:bold;
+  color:#ffd1e4;
 
-      border: 0;
-      border-radius: 50%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
-      background: #24151d;
-      color: #ffd1e4;
+.chapter-name{
+  margin-top:3px;
+  font-size:12px;
+  color:#c9aeb9;
+}
 
-      font-size: 18px;
-      cursor: pointer;
+.top-btn{
+  width:40px;
+  height:40px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  border:0;
+  border-radius:50%;
 
-      flex-shrink: 0;
-    }
+  background:#24151d;
+  color:#ffd1e4;
 
-    .top-btn:active {
-      transform: scale(0.92);
-    }
+  font-size:18px;
 
-    /* منطقة القراءة */
-    #reader {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      background: #000;
-    }
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-    .page-wrap {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      background: #000;
-      touch-action: pan-y;
-    }
+  cursor:pointer;
+}
 
-    .page {
-      display: block;
+/* منطقة القراءة */
 
-      width: 100%;
-      height: auto;
+#reader{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+  background:#000;
+}
 
-      margin: 0;
-      padding: 0;
+/*
+  في الوضع الطبيعي:
+  الصفحة تتحرك مع تمرير الهاتف بشكل طبيعي.
+*/
 
-      transform-origin: center center;
+.page-wrap{
+  width:100%;
+  position:relative;
 
-      will-change: transform;
+  background:#000;
 
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-user-drag: none;
-    }
+  overflow:hidden;
 
-    /* التحميل */
-    .loading {
-      min-height: 60vh;
+  touch-action:pan-y;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+/* الصورة */
 
-      flex-direction: column;
-      gap: 10px;
+.page{
+  display:block;
 
-      color: #d8b8c5;
-      font-size: 15px;
-      background: #000;
-    }
+  width:100%;
+  height:auto;
 
-    .loading-heart {
-      font-size: 30px;
-      animation: heart 1s infinite;
-    }
+  margin:0;
+  padding:0;
 
-    @keyframes heart {
-      0%, 100% {
-        transform: scale(1);
-      }
+  transform-origin:center center;
 
-      50% {
-        transform: scale(1.15);
-      }
-    }
+  will-change:transform;
 
-    /* الخطأ */
-    .error {
-      margin: 40px 20px;
-      padding: 20px;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-user-drag:none;
+}
 
-      text-align: center;
+/* التحميل */
 
-      background: #170c11;
-      border: 1px solid #4a2635;
-      border-radius: 18px;
+.loading{
+  min-height:60vh;
 
-      color: #ffd1e4;
-    }
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-    /* الشريط السفلي */
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+  flex-direction:column;
+  gap:10px;
 
-      z-index: 2000;
+  color:#d8b8c5;
+}
 
-      height: 66px;
+.loading-heart{
+  font-size:30px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  animation:heart 1s infinite;
+}
 
-      gap: 8px;
+@keyframes heart{
 
-      padding: 8px 10px;
+  0%,100%{
+    transform:scale(1);
+  }
 
-      background: rgba(0, 0, 0, 0.94);
-      border-top: 1px solid #333;
-      box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.5);
+  50%{
+    transform:scale(1.15);
+  }
 
-      backdrop-filter: blur(10px);
-    }
+}
 
-    .nav-btn {
-      height: 46px;
+/* الخطأ */
 
-      padding: 0 15px;
+.error{
+  margin:40px 20px;
+  padding:20px;
 
-      border: 0;
-      border-radius: 15px;
+  text-align:center;
 
-      background: #24151d;
-      color: #ffd1e4;
+  background:#170c11;
+  border:1px solid #4a2635;
 
-      font-size: 13px;
-      font-weight: bold;
+  border-radius:18px;
 
-      cursor: pointer;
-      white-space: nowrap;
-    }
+  color:#ffd1e4;
+}
 
-    .nav-btn.main {
-      background: #c46b91;
-      color: white;
-    }
+/* الشريط السفلي */
 
-    .nav-btn:active {
-      transform: scale(0.95);
-    }
+.bottom-bar{
+  position:fixed;
 
-    .nav-btn:disabled {
-      opacity: 0.35;
-      cursor: default;
-    }
+  bottom:0;
+  left:0;
+  right:0;
 
-    @media (max-width: 600px) {
+  z-index:2000;
 
-      .top-bar {
-        height: 54px;
-      }
+  height:66px;
 
-      .top-btn {
-        width: 37px;
-        height: 37px;
-        font-size: 16px;
-      }
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-      .manga-name {
-        font-size: 13px;
-      }
+  gap:8px;
 
-      .chapter-name {
-        font-size: 11px;
-      }
+  padding:8px 10px;
 
-      .bottom-bar {
-        height: 62px;
-        gap: 6px;
-        padding: 7px;
-      }
+  background:rgba(0,0,0,.95);
 
-      .nav-btn {
-        height: 44px;
-        padding: 0 11px;
-        font-size: 12px;
-        border-radius: 13px;
-      }
-    }
-  </style>
+  border-top:1px solid #333;
+
+  backdrop-filter:blur(10px);
+}
+
+.nav-btn{
+
+  height:46px;
+
+  padding:0 15px;
+
+  border:0;
+  border-radius:15px;
+
+  background:#24151d;
+
+  color:#ffd1e4;
+
+  font-size:13px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  white-space:nowrap;
+}
+
+.nav-btn.main{
+  background:#c46b91;
+  color:white;
+}
+
+.nav-btn:active{
+  transform:scale(.95);
+}
+
+.nav-btn:disabled{
+  opacity:.35;
+}
+
+@media(max-width:600px){
+
+  .top-bar{
+    height:54px;
+  }
+
+  .top-btn{
+    width:37px;
+    height:37px;
+    font-size:16px;
+  }
+
+  .manga-name{
+    font-size:13px;
+  }
+
+  .chapter-name{
+    font-size:11px;
+  }
+
+  .bottom-bar{
+    height:62px;
+    gap:6px;
+    padding:7px;
+  }
+
+  .nav-btn{
+    height:44px;
+    padding:0 11px;
+    font-size:12px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <header class="top-bar">
 
-    <button class="top-btn" id="backBtn">
-      ↩
-    </button>
+<header class="top-bar">
 
-    <div class="top-title">
+  <button
+    class="top-btn"
+    id="backBtn">
+    ↩
+  </button>
 
-      <div class="manga-name" id="mangaTitle">
-        Sakura Tales
-      </div>
+  <div class="top-title">
 
-      <div class="chapter-name" id="chapterTitle">
-        جاري تحميل الفصل...
-      </div>
-
+    <div
+      class="manga-name"
+      id="mangaTitle">
+      Sakura Tales
     </div>
 
-    <button class="top-btn" id="chaptersBtn">
-      📚
-    </button>
-
-  </header>
-
-
-  <main id="reader">
-
-    <div class="loading" id="loading">
-
-      <div class="loading-heart">
-        🌸
-      </div>
-
-      <div>
-        جاري تحميل الفصل...
-      </div>
-
+    <div
+      class="chapter-name"
+      id="chapterTitle">
+      جاري تحميل الفصل...
     </div>
 
-  </main>
+  </div>
+
+  <button
+    class="top-btn"
+    id="chaptersBtn">
+    📚
+  </button>
+
+</header>
 
 
-  <nav class="bottom-bar">
+<main id="reader">
 
-    <button class="nav-btn" id="prevBtn">
-      ⬅ السابق
-    </button>
+  <div
+    class="loading"
+    id="loading">
 
-    <button class="nav-btn main" id="chaptersBottomBtn">
-      📚 الفصول
-    </button>
+    <div class="loading-heart">
+      🌸
+    </div>
 
-    <button class="nav-btn" id="nextBtn">
-      التالي ➡
-    </button>
+    <div>
+      جاري تحميل الفصل...
+    </div>
 
-  </nav>
+  </div>
 
-
-  <script type="module">
-
-    import { db } from "./firebase.js";
-
-    import {
-      doc,
-      getDoc,
-      collection,
-      getDocs,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+</main>
 
 
-    const params =
-      new URLSearchParams(window.location.search);
+<nav class="bottom-bar">
 
-    const mangaId =
-      params.get("id");
+  <button
+    class="nav-btn"
+    id="prevBtn">
+    ⬅ السابق
+  </button>
 
-    const chapterId =
-      params.get("chapter");
+  <button
+    class="nav-btn main"
+    id="chaptersBottomBtn">
+    📚 الفصول
+  </button>
 
+  <button
+    class="nav-btn"
+    id="nextBtn">
+    التالي ➡
+  </button>
 
-    const reader =
-      document.getElementById("reader");
-
-    const loading =
-      document.getElementById("loading");
-
-    const mangaTitle =
-      document.getElementById("mangaTitle");
-
-    const chapterTitle =
-      document.getElementById("chapterTitle");
-
-    const backBtn =
-      document.getElementById("backBtn");
-
-    const chaptersBtn =
-      document.getElementById("chaptersBtn");
-
-    const chaptersBottomBtn =
-      document.getElementById("chaptersBottomBtn");
-
-    const prevBtn =
-      document.getElementById("prevBtn");
-
-    const nextBtn =
-      document.getElementById("nextBtn");
+</nav>
 
 
-    if (!mangaId || !chapterId) {
+<script type="module">
 
-      showError("رابط الفصل غير صحيح.");
 
-    } else {
+import { db } from "./firebase.js";
 
-      loadReader();
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* الرابط */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const mangaId =
+  params.get("id");
+
+const chapterId =
+  params.get("chapter");
+
+
+/* العناصر */
+
+const reader =
+  document.getElementById("reader");
+
+const loading =
+  document.getElementById("loading");
+
+const mangaTitle =
+  document.getElementById("mangaTitle");
+
+const chapterTitle =
+  document.getElementById("chapterTitle");
+
+const backBtn =
+  document.getElementById("backBtn");
+
+const chaptersBtn =
+  document.getElementById("chaptersBtn");
+
+const chaptersBottomBtn =
+  document.getElementById(
+    "chaptersBottomBtn"
+  );
+
+const prevBtn =
+  document.getElementById(
+    "prevBtn"
+  );
+
+const nextBtn =
+  document.getElementById(
+    "nextBtn"
+  );
+
+
+/* البداية */
+
+if(!mangaId || !chapterId){
+
+  showError(
+    "رابط الفصل غير صحيح."
+  );
+
+}else{
+
+  loadReader();
+
+}
+
+
+/* تحميل الفصل */
+
+async function loadReader(){
+
+  try{
+
+    const mangaRef =
+      doc(
+        db,
+        "manga",
+        mangaId
+      );
+
+    const mangaSnap =
+      await getDoc(
+        mangaRef
+      );
+
+
+    if(!mangaSnap.exists()){
+
+      showError(
+        "لم يتم العثور على المانهوا."
+      );
+
+      return;
 
     }
 
 
-    async function loadReader() {
-
-      try {
-
-        const mangaRef =
-          doc(db, "manga", mangaId);
-
-        const mangaSnap =
-          await getDoc(mangaRef);
+    const manga =
+      mangaSnap.data();
 
 
-        if (!mangaSnap.exists()) {
-
-          showError("لم يتم العثور على المانهوا.");
-
-          return;
-        }
+    mangaTitle.textContent =
+      manga.title ||
+      "Sakura Tales";
 
 
-        const manga =
-          mangaSnap.data();
+    const chapterRef =
+      doc(
+        db,
+        "manga",
+        mangaId,
+        "chapters",
+        chapterId
+      );
 
 
-        mangaTitle.textContent =
-          manga.title || "Sakura Tales";
+    const chapterSnap =
+      await getDoc(
+        chapterRef
+      );
 
 
-        const chapterRef =
-          doc(
-            db,
-            "manga",
-            mangaId,
-            "chapters",
-            chapterId
-          );
+    if(!chapterSnap.exists()){
+
+      showError(
+        "لم يتم العثور على الفصل."
+      );
+
+      return;
+
+    }
 
 
-        const chapterSnap =
-          await getDoc(chapterRef);
+    const chapter =
+      chapterSnap.data();
 
 
-        if (!chapterSnap.exists()) {
-
-          showError("لم يتم العثور على هذا الفصل.");
-
-          return;
-        }
+    chapterTitle.textContent =
+      chapter.title
+      ? `الفصل ${chapter.number || ""} — ${chapter.title}`
+      : `الفصل ${chapter.number || ""}`;
 
 
-        const chapter =
-          chapterSnap.data();
+    const pages =
+      Array.isArray(
+        chapter.pages
+      )
+      ? chapter.pages
+      : [];
 
 
-        chapterTitle.textContent =
-          chapter.title
-            ? `الفصل ${chapter.number || ""} — ${chapter.title}`
-            : `الفصل ${chapter.number || ""}`;
+    if(pages.length === 0){
+
+      showError(
+        "هذا الفصل لا يحتوي على صفحات."
+      );
+
+      return;
+
+    }
 
 
-        const pages =
-          Array.isArray(chapter.pages)
-            ? chapter.pages
-            : [];
+    loading.remove();
 
 
-        if (pages.length === 0) {
+    pages.forEach(
+      (url,index)=>{
 
-          showError("هذا الفصل لا يحتوي على صفحات.");
-
-          return;
-        }
-
-
-        loading.remove();
-
-
-        pages.forEach((url, index) => {
-
-          createPage(url, index);
-
-        });
-
-
-        await setupChapterNavigation();
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        showError(
-          "حدث خطأ أثناء تحميل الفصل."
+        createPage(
+          url,
+          index
         );
-
-      }
-
-    }
-
-
-    function createPage(url, index) {
-
-      const wrap =
-        document.createElement("div");
-
-      wrap.className =
-        "page-wrap";
-
-
-      const img =
-        document.createElement("img");
-
-      img.className =
-        "page";
-
-      img.src =
-        url;
-
-      img.alt =
-        `صفحة ${index + 1}`;
-
-      img.draggable =
-        false;
-
-      img.loading =
-        index === 0
-          ? "eager"
-          : "lazy";
-
-
-      img.addEventListener(
-        "contextmenu",
-        event => event.preventDefault()
-      );
-
-
-      setupZoom(wrap, img);
-
-
-      wrap.appendChild(img);
-
-      reader.appendChild(wrap);
-
-    }
-
-
-    /* التكبير والتحريك */
-
-    function setupZoom(wrap, img) {
-
-      let scale = 1;
-
-      let translateX = 0;
-      let translateY = 0;
-
-      let startX = 0;
-      let startY = 0;
-
-      let startTranslateX = 0;
-      let startTranslateY = 0;
-
-      let startDistance = 0;
-      let startScale = 1;
-
-      let lastTouchCount = 0;
-
-
-      const MIN_ZOOM = 1;
-      const MAX_ZOOM = 5;
-
-
-      function applyTransform() {
-
-        img.style.transform =
-          `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
-
-      }
-
-
-      function distance(t1, t2) {
-
-        const dx =
-          t2.clientX - t1.clientX;
-
-        const dy =
-          t2.clientY - t1.clientY;
-
-        return Math.sqrt(
-          dx * dx + dy * dy
-        );
-
-      }
-
-
-      wrap.addEventListener(
-        "touchstart",
-        event => {
-
-          lastTouchCount =
-            event.touches.length;
-
-
-          if (event.touches.length === 2) {
-
-            startDistance =
-              distance(
-                event.touches[0],
-                event.touches[1]
-              );
-
-            startScale =
-              scale;
-
-            event.preventDefault();
-
-            return;
-          }
-
-
-          if (
-            event.touches.length === 1 &&
-            scale > 1
-          ) {
-
-            startX =
-              event.touches[0].clientX;
-
-            startY =
-              event.touches[0].clientY;
-
-            startTranslateX =
-              translateX;
-
-            startTranslateY =
-              translateY;
-
-          }
-
-        },
-        { passive: false }
-      );
-
-
-      wrap.addEventListener(
-        "touchmove",
-        event => {
-
-          if (event.touches.length === 2) {
-
-            const currentDistance =
-              distance(
-                event.touches[0],
-                event.touches[1]
-              );
-
-
-            if (startDistance > 0) {
-
-              const ratio =
-                currentDistance /
-                startDistance;
-
-
-              scale =
-                startScale * ratio;
-
-
-              scale =
-                Math.max(
-                  MIN_ZOOM,
-                  Math.min(MAX_ZOOM, scale)
-                );
-
-
-              applyTransform();
-
-              event.preventDefault();
-
-            }
-
-            return;
-          }
-
-
-          if (
-            event.touches.length === 1 &&
-            scale > 1
-          ) {
-
-            const x =
-              event.touches[0].clientX;
-
-            const y =
-              event.touches[0].clientY;
-
-
-            translateX =
-              startTranslateX +
-              (x - startX);
-
-            translateY =
-              startTranslateY +
-              (y - startY);
-
-
-            applyTransform();
-
-            event.preventDefault();
-
-          }
-
-        },
-        { passive: false }
-      );
-
-
-      wrap.addEventListener(
-        "touchend",
-        event => {
-
-          if (
-            lastTouchCount === 2 &&
-            event.touches.length === 0
-          ) {
-
-            if (scale <= 1.02) {
-
-              scale = 1;
-
-              translateX = 0;
-              translateY = 0;
-
-              applyTransform();
-
-            }
-
-          }
-
-
-          lastTouchCount =
-            event.touches.length;
-
-        },
-        { passive: false }
-      );
-
-
-      img.addEventListener(
-        "dragstart",
-        event => event.preventDefault()
-      );
-
-    }
-
-
-    /* الرجوع */
-
-    backBtn.addEventListener(
-      "click",
-      () => {
-
-        if (document.referrer) {
-
-          history.back();
-
-        } else {
-
-          window.location.href =
-            `./manga.html?id=${encodeURIComponent(mangaId)}`;
-
-        }
 
       }
     );
 
 
-    /* الفصول */
+    await setupChapterNavigation();
 
-    function goToChapters() {
+
+  }catch(error){
+
+    console.error(error);
+
+    showError(
+      "حدث خطأ أثناء تحميل الفصل."
+    );
+
+  }
+
+}
+
+
+/* إنشاء الصورة */
+
+function createPage(
+  url,
+  index
+){
+
+  const wrap =
+    document.createElement(
+      "div"
+    );
+
+  wrap.className =
+    "page-wrap";
+
+
+  const img =
+    document.createElement(
+      "img"
+    );
+
+  img.className =
+    "page";
+
+  img.src =
+    url;
+
+  img.alt =
+    `صفحة ${index + 1}`;
+
+  img.draggable =
+    false;
+
+  img.loading =
+    index === 0
+    ? "eager"
+    : "lazy";
+
+
+  img.addEventListener(
+    "contextmenu",
+    e => e.preventDefault()
+  );
+
+
+  setupZoom(
+    wrap,
+    img
+  );
+
+
+  wrap.appendChild(
+    img
+  );
+
+  reader.appendChild(
+    wrap
+  );
+
+}
+
+
+/*
+================================
+نظام التكبير والتحريك الجديد
+================================
+*/
+
+function setupZoom(
+  wrap,
+  img
+){
+
+  let scale = 1;
+
+  let x = 0;
+  let y = 0;
+
+  let startX = 0;
+  let startY = 0;
+
+  let startXPos = 0;
+  let startYPos = 0;
+
+  let startDistance = 0;
+  let startScale = 1;
+
+
+  const MIN_ZOOM = 1;
+  const MAX_ZOOM = 5;
+
+
+  /*
+    حجم الصورة الحقيقي
+    بعد تحميلها
+  */
+
+  function getBounds(){
+
+    const rect =
+      wrap.getBoundingClientRect();
+
+    const width =
+      img.offsetWidth;
+
+    const height =
+      img.offsetHeight;
+
+
+    const scaledWidth =
+      width * scale;
+
+    const scaledHeight =
+      height * scale;
+
+
+    /*
+      الحد الأفقي
+    */
+
+    let maxX =
+      Math.max(
+        0,
+        (scaledWidth - rect.width) / 2
+      );
+
+
+    /*
+      الحد العمودي
+    */
+
+    let maxY =
+      Math.max(
+        0,
+        (scaledHeight - rect.height) / 2
+      );
+
+
+    return {
+      maxX,
+      maxY
+    };
+
+  }
+
+
+  /*
+    منع الصورة من الخروج
+  */
+
+  function clamp(){
+
+    const bounds =
+      getBounds();
+
+
+    x =
+      Math.max(
+        -bounds.maxX,
+        Math.min(
+          bounds.maxX,
+          x
+        )
+      );
+
+
+    y =
+      Math.max(
+        -bounds.maxY,
+        Math.min(
+          bounds.maxY,
+          y
+        )
+      );
+
+  }
+
+
+  /*
+    تطبيق الحركة
+  */
+
+  function render(){
+
+    clamp();
+
+
+    img.style.transform =
+      `translate3d(${x}px,${y}px,0) scale(${scale})`;
+
+  }
+
+
+  /*
+    المسافة بين إصبعين
+  */
+
+  function distance(
+    a,
+    b
+  ){
+
+    const dx =
+      b.clientX -
+      a.clientX;
+
+    const dy =
+      b.clientY -
+      a.clientY;
+
+    return Math.sqrt(
+      dx * dx +
+      dy * dy
+    );
+
+  }
+
+
+  /*
+    بداية اللمس
+  */
+
+  wrap.addEventListener(
+    "touchstart",
+    event => {
+
+      /*
+        إصبعين:
+        بداية التكبير
+      */
+
+      if(
+        event.touches.length === 2
+      ){
+
+        startDistance =
+          distance(
+            event.touches[0],
+            event.touches[1]
+          );
+
+        startScale =
+          scale;
+
+        event.preventDefault();
+
+        return;
+
+      }
+
+
+      /*
+        إصبع واحد:
+        يسمح بالتحريك فقط
+        إذا كانت الصورة مكبرة
+      */
+
+      if(
+        event.touches.length === 1 &&
+        scale > 1
+      ){
+
+        startX =
+          event.touches[0].clientX;
+
+        startY =
+          event.touches[0].clientY;
+
+        startXPos =
+          x;
+
+        startYPos =
+          y;
+
+      }
+
+    },
+    {
+      passive:false
+    }
+  );
+
+
+  /*
+    حركة اللمس
+  */
+
+  wrap.addEventListener(
+    "touchmove",
+    event => {
+
+
+      /*
+        إصبعين = تكبير وتصغير
+      */
+
+      if(
+        event.touches.length === 2
+      ){
+
+        const currentDistance =
+          distance(
+            event.touches[0],
+            event.touches[1]
+          );
+
+
+        if(
+          startDistance > 0
+        ){
+
+          const ratio =
+            currentDistance /
+            startDistance;
+
+
+          scale =
+            startScale *
+            ratio;
+
+
+          scale =
+            Math.max(
+              MIN_ZOOM,
+              Math.min(
+                MAX_ZOOM,
+                scale
+              )
+            );
+
+
+          render();
+
+
+          event.preventDefault();
+
+        }
+
+
+        return;
+
+      }
+
+
+      /*
+        إصبع واحد + تكبير
+        = تحريك كامل
+      */
+
+      if(
+        event.touches.length === 1 &&
+        scale > 1
+      ){
+
+        const currentX =
+          event.touches[0].clientX;
+
+        const currentY =
+          event.touches[0].clientY;
+
+
+        x =
+          startXPos +
+          (
+            currentX -
+            startX
+          );
+
+
+        y =
+          startYPos +
+          (
+            currentY -
+            startY
+          );
+
+
+        render();
+
+
+        event.preventDefault();
+
+      }
+
+    },
+    {
+      passive:false
+    }
+  );
+
+
+  /*
+    انتهاء اللمس
+  */
+
+  wrap.addEventListener(
+    "touchend",
+    event => {
+
+      /*
+        إذا وصل التكبير
+        للحجم الطبيعي
+      */
+
+      if(
+        scale <= 1.01
+      ){
+
+        scale = 1;
+
+        x = 0;
+        y = 0;
+
+        render();
+
+      }
+
+    },
+    {
+      passive:false
+    }
+  );
+
+
+  /*
+    إذا تغير حجم الشاشة
+  */
+
+  window.addEventListener(
+    "resize",
+    () => {
+
+      render();
+
+    }
+  );
+
+
+  img.addEventListener(
+    "dragstart",
+    e => e.preventDefault()
+  );
+
+}
+
+
+/* الرجوع */
+
+backBtn.addEventListener(
+  "click",
+  () => {
+
+    if(
+      document.referrer
+    ){
+
+      history.back();
+
+    }else{
 
       window.location.href =
         `./manga.html?id=${encodeURIComponent(mangaId)}`;
 
     }
 
-
-    chaptersBtn.addEventListener(
-      "click",
-      goToChapters
-    );
+  }
+);
 
 
-    chaptersBottomBtn.addEventListener(
-      "click",
-      goToChapters
-    );
+/* الفصول */
+
+function goToChapters(){
+
+  window.location.href =
+    `./manga.html?id=${encodeURIComponent(mangaId)}`;
+
+}
 
 
-    /* السابق والتالي */
+chaptersBtn.addEventListener(
+  "click",
+  goToChapters
+);
 
-    async function setupChapterNavigation() {
-
-      try {
-
-        const chaptersRef =
-          collection(
-            db,
-            "manga",
-            mangaId,
-            "chapters"
-          );
+chaptersBottomBtn.addEventListener(
+  "click",
+  goToChapters
+);
 
 
-        const q =
-          query(
-            chaptersRef,
-            orderBy("number", "asc")
-          );
+/* التنقل بين الفصول */
+
+async function setupChapterNavigation(){
+
+  try{
+
+    const chaptersRef =
+      collection(
+        db,
+        "manga",
+        mangaId,
+        "chapters"
+      );
 
 
-        const snapshot =
-          await getDocs(q);
+    const q =
+      query(
+        chaptersRef,
+        orderBy(
+          "number",
+          "asc"
+        )
+      );
 
 
-        const chapters =
-          snapshot.docs.map(docSnap => ({
-
-            id: docSnap.id,
-            ...docSnap.data()
-
-          }));
+    const snapshot =
+      await getDocs(q);
 
 
-        const currentIndex =
-          chapters.findIndex(
-            chapter =>
-              chapter.id === chapterId
-          );
+    const chapters =
+      snapshot.docs.map(
+        d => ({
+          id:d.id,
+          ...d.data()
+        })
+      );
 
 
-        if (currentIndex === -1) {
-
-          prevBtn.disabled = true;
-          nextBtn.disabled = true;
-
-          return;
-        }
+    const currentIndex =
+      chapters.findIndex(
+        chapter =>
+          chapter.id === chapterId
+      );
 
 
-        if (currentIndex > 0) {
+    if(
+      currentIndex === -1
+    ){
 
-          const previous =
-            chapters[currentIndex - 1];
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
 
-
-          prevBtn.addEventListener(
-            "click",
-            () => {
-
-              openChapter(previous.id);
-
-            }
-          );
-
-        } else {
-
-          prevBtn.disabled = true;
-
-        }
-
-
-        if (
-          currentIndex <
-          chapters.length - 1
-        ) {
-
-          const next =
-            chapters[currentIndex + 1];
-
-
-          nextBtn.addEventListener(
-            "click",
-            () => {
-
-              openChapter(next.id);
-
-            }
-          );
-
-        } else {
-
-          nextBtn.disabled = true;
-
-        }
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
+      return;
 
     }
 
 
-    function openChapter(id) {
+    /* السابق */
 
-      window.location.href =
-        `./reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(id)}`;
+    if(
+      currentIndex > 0
+    ){
 
-    }
-
-
-    function showError(message) {
-
-      if (loading) {
-        loading.remove();
-      }
+      const previous =
+        chapters[
+          currentIndex - 1
+        ];
 
 
-      reader.innerHTML = `
+      prevBtn.addEventListener(
+        "click",
+        () => {
 
-        <div class="error">
+          openChapter(
+            previous.id
+          );
 
-          🌸
+        }
+      );
 
-          <br><br>
+    }else{
 
-          ${message}
-
-        </div>
-
-      `;
+      prevBtn.disabled = true;
 
     }
 
-  </script>
+
+    /* التالي */
+
+    if(
+      currentIndex <
+      chapters.length - 1
+    ){
+
+      const next =
+        chapters[
+          currentIndex + 1
+        ];
+
+
+      nextBtn.addEventListener(
+        "click",
+        () => {
+
+          openChapter(
+            next.id
+          );
+
+        }
+      );
+
+    }else{
+
+      nextBtn.disabled = true;
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* فتح فصل */
+
+function openChapter(
+  id
+){
+
+  window.location.href =
+    `./reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(id)}`;
+
+}
+
+
+/* خطأ */
+
+function showError(
+  message
+){
+
+  if(loading){
+    loading.remove();
+  }
+
+
+  reader.innerHTML = `
+
+    <div class="error">
+
+      🌸
+
+      <br><br>
+
+      ${message}
+
+    </div>
+
+  `;
+
+}
+
+</script>
 
 </body>
 </html>
