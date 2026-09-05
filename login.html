@@ -10,39 +10,33 @@
       margin: 0;
       min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       background: #fff5fa;
       font-family: Arial, sans-serif;
-      color: #633f51;
     }
 
-    .login-box {
+    .box {
       width: 90%;
       max-width: 380px;
-      background: white;
       padding: 30px;
+      background: white;
       border-radius: 22px;
-      box-shadow: 0 8px 30px rgba(180, 100, 140, 0.15);
+      box-shadow: 0 8px 30px rgba(180,100,140,.15);
       text-align: center;
     }
 
     h1 {
       color: #a64f78;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #8d6879;
     }
 
     input {
       width: 100%;
       padding: 14px;
       margin: 8px 0;
+      box-sizing: border-box;
       border: 1px solid #edc5d7;
       border-radius: 12px;
-      box-sizing: border-box;
       font-size: 15px;
     }
 
@@ -50,146 +44,92 @@
       width: 100%;
       padding: 14px;
       margin-top: 12px;
-      border: none;
+      border: 0;
       border-radius: 12px;
       background: #d96f9d;
       color: white;
       font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #c85d8d;
     }
 
     #message {
       margin-top: 15px;
       padding: 10px;
-      border-radius: 10px;
-      background: #fff0f6;
+      color: #8f4668;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="login-box">
+<div class="box">
 
-    <h1>🌸 Sakura Tales</h1>
+  <h1>🌸 Sakura Tales</h1>
 
-    <p>تسجيل الدخول إلى لوحة التحكم</p>
+  <p>تسجيل الدخول إلى لوحة التحكم</p>
 
-    <input
-      type="email"
-      id="email"
-      placeholder="البريد الإلكتروني"
-      autocomplete="email"
-    >
+  <input
+    type="email"
+    id="email"
+    placeholder="البريد الإلكتروني"
+  >
 
-    <input
-      type="password"
-      id="password"
-      placeholder="كلمة المرور"
-      autocomplete="current-password"
-    >
+  <input
+    type="password"
+    id="password"
+    placeholder="كلمة المرور"
+  >
 
-    <button id="loginBtn">
-      تسجيل الدخول
-    </button>
+  <button id="loginBtn">
+    تسجيل الدخول
+  </button>
 
-    <div id="message"></div>
+  <div id="message"></div>
 
-  </div>
+</div>
 
+<script type="module">
 
-  <script type="module">
+  import { auth } from "./firebase.js";
 
-    import { auth } from "./firebase.js";
+  import {
+    signInWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    import {
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const loginBtn = document.getElementById("loginBtn");
+  const message = document.getElementById("message");
 
+  loginBtn.addEventListener("click", async () => {
 
-    const email =
-      document.getElementById("email");
+    message.textContent = "جاري تسجيل الدخول...";
 
-    const password =
-      document.getElementById("password");
+    try {
 
-    const loginBtn =
-      document.getElementById("loginBtn");
+      await signInWithEmailAndPassword(
+        auth,
+        email.value.trim(),
+        password.value
+      );
 
-    const message =
-      document.getElementById("message");
+      message.textContent = "تم تسجيل الدخول 💗";
 
+      setTimeout(() => {
+        window.location.href = "admin.html";
+      }, 700);
 
-    loginBtn.addEventListener("click", async () => {
+    } catch (error) {
 
-      const emailValue = email.value.trim();
-      const passwordValue = password.value;
-
-      if (!emailValue || !passwordValue) {
-
-        message.textContent =
-          "اكتبي البريد الإلكتروني وكلمة المرور 🌸";
-
-        return;
-      }
+      console.error(error);
 
       message.textContent =
-        "جاري تسجيل الدخول...";
+        "خطأ في تسجيل الدخول: " + error.code;
 
+    }
 
-      try {
+  });
 
-        await signInWithEmailAndPassword(
-          auth,
-          emailValue,
-          passwordValue
-        );
-
-        message.textContent =
-          "تم تسجيل الدخول بنجاح 💗";
-
-        setTimeout(() => {
-
-          window.location.href = "admin.html";
-
-        }, 700);
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        if (error.code === "auth/invalid-credential") {
-
-          message.textContent =
-            "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
-        } else if (error.code === "auth/invalid-email") {
-
-          message.textContent =
-            "البريد الإلكتروني غير صحيح.";
-
-        } else if (error.code === "auth/too-many-requests") {
-
-          message.textContent =
-            "محاولات كثيرة. انتظري قليلًا ثم حاولي مرة أخرى.";
-
-        } else {
-
-          message.textContent =
-            "حدث خطأ: " + error.message;
-
-        }
-
-      }
-
-    });
-
-  </script>
+</script>
 
 </body>
 </html>
