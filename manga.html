@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المانهوا | Sakura Tales</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff7fb;
+      color: #633f51;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffd6e8, #efa8c7);
+      padding: 20px;
+      text-align: center;
+    }
+
+    header a {
+      color: #8f4668;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .info {
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 5px 20px rgba(160,80,120,.12);
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .cover {
+      width: 190px;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      color: #9b4770;
+    }
+
+    .genres {
+      color: #9b4770;
+      margin: 12px 0;
+    }
+
+    .description {
+      line-height: 1.8;
+    }
+
+    .chapters {
+      background: white;
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(160,80,120,.12);
+    }
+
+    .chapter {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      margin: 10px 0;
+      background: #fff7fb;
+      border: 1px solid #f1d5e2;
+      border-radius: 14px;
+    }
+
+    .chapter a {
+      color: #9b4770;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html">🏠 Sakura Tales</a>
+</header>
+
+<main>
+
+  <section class="info" id="mangaInfo">
+    جاري تحميل المانهوا... 🌸
+  </section>
+
+  <section class="chapters">
+
+    <h2>📖 الفصول</h2>
+
+    <div id="chapterList">
+      جاري تحميل الفصول...
+    </div>
+
+  </section>
+
+</main>
+
+
+<script type="module">
+
+  import { db } from "./firebase.js";
+
+  import {
+    doc,
+    getDoc,
+    collection,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const mangaId =
+    params.get("id");
+
+
+  const mangaInfo =
+    document.getElementById("mangaInfo");
+
+  const chapterList =
+    document.getElementById("chapterList");
+
+
+  if (!mangaId) {
+
+    mangaInfo.innerHTML =
+      "لم يتم تحديد المانهوا 🌸";
+
+  } else {
+
+    loadManga();
+
+    loadChapters();
+
+  }
+
+
+  async function loadManga() {
+
+    try {
+
+      const mangaRef =
+        doc(db, "manga", mangaId);
+
+      const mangaSnap =
+        await getDoc(mangaRef);
+
+
+      if (!mangaSnap.exists()) {
+
+        mangaInfo.innerHTML =
+          "المانهوا غير موجودة 🌸";
+
+        return;
+
+      }
+
+
+      const data =
+        mangaSnap.data();
+
+
+      const genres =
+        Array.isArray(data.genres)
+          ? data.genres.join(" • ")
+          : data.genres || "";
+
+
+      mangaInfo.innerHTML = `
+
+        ${
+          data.cover
+            ? `<img class="cover" src="${data.cover}" alt="">`
+            : ""
+        }
+
+        <h1>${data.title || "بدون اسم"}</h1>
+
+        <div class="genres">
+          ${genres}
+        </div>
+
+        <div class="description">
+          ${data.description || "لا يوجد وصف."}
+        </div>
+
+        <p>
+          الحالة: ${data.status || "غير محددة"}
+        </p>
+
+      `;
+
+
+      document.title =
+        (data.title || "المانهوا") +
+        " | Sakura Tales";
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      mangaInfo.innerHTML =
+        "حدث خطأ في تحميل المانهوا 🌸";
+
+    }
+
+  }
+
+
+  async function loadChapters() {
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(
+            db,
+            "manga",
+            mangaId,
+            "chapters"
+          )
+        );
+
+
+      if (snapshot.empty) {
+
+        chapterList.innerHTML =
+          '<div class="empty">لا توجد فصول حتى الآن 📖</div>';
+
+        return;
+
+      }
+
+
+      const chapters = [];
+
+
+      snapshot.forEach((item) => {
+
+        chapters.push({
+          id: item.id,
+          ...item.data()
+        });
+
+      });
+
+
+      chapters.sort(
+        (a, b) =>
+          Number(a.number) -
+          Number(b.number)
+      );
+
+
+      chapterList.innerHTML = "";
+
+
+      chapters.forEach((chapter) => {
+
+        const div =
+          document.createElement("div");
+
+        div.className = "chapter";
+
+
+        div.innerHTML = `
+
+          <span>
+            📖 الفصل ${chapter.number || ""}
+            ${
+              chapter.title
+                ? " — " + chapter.title
+                : ""
+            }
+          </span>
+
+          <a href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(chapter.id)}">
+            قراءة
+          </a>
+
+        `;
+
+
+        chapterList.appendChild(div);
+
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      chapterList.innerHTML =
+        "حدث خطأ في تحميل الفصول 🌸";
+
+    }
+
+  }
+
+</script>
+
+</body>
+</html>
