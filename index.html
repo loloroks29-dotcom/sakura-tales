@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Sakura Tales 🌸</title>
-
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Sakura Tales 🌸</title>  <style>
     * {
       box-sizing: border-box;
     }
@@ -130,6 +125,100 @@
     .section-title p {
       color: #8b6878;
       margin-top: 0;
+    }
+
+    /* =========================
+       آخر الفصول
+    ========================= */
+
+    .latest-chapters {
+      margin: 35px 0 45px;
+    }
+
+    .latest-chapters-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .latest-chapters-title h2 {
+      color: #a64f78;
+      margin: 0 0 7px;
+    }
+
+    .latest-chapters-title p {
+      color: #8b6878;
+      margin: 0;
+    }
+
+    .chapters-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chapter-card {
+      background: white;
+      border-radius: 17px;
+      padding: 14px 17px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(160, 80, 120, .10);
+      border: 1px solid #f6dce8;
+      transition:
+        transform .2s,
+        box-shadow .2s;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 23px rgba(160, 80, 120, .16);
+    }
+
+    .chapter-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .chapter-manga {
+      color: #9b4770;
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chapter-name {
+      color: #806372;
+      font-size: 13px;
+    }
+
+    .chapter-date {
+      color: #b15c82;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .chapter-badge {
+      flex-shrink: 0;
+      background: #ffe1ed;
+      color: #9b4770;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .latest-empty {
+      text-align: center;
+      background: white;
+      border-radius: 18px;
+      padding: 30px 20px;
+      color: #8b6878;
+      box-shadow: 0 5px 18px rgba(160, 80, 120, .08);
     }
 
     /* الفلاتر */
@@ -372,109 +461,100 @@
         padding: 5px 8px;
         font-size: 10px;
       }
+
+      .chapter-card {
+        padding: 12px;
+      }
+
+      .chapter-manga {
+        font-size: 14px;
+      }
+
+      .chapter-name {
+        font-size: 12px;
+      }
+
+      .chapter-badge {
+        padding: 7px 9px;
+        font-size: 10px;
+      }
     }
-  </style>
-</head>
-
-<body>
-
-<header>
-
-  <div class="logo">
+  </style></head><body><header>  <div class="logo">
     <h1>🌸 Sakura Tales</h1>
     <p>عالم من المانهوا والقصص الجميلة 💗</p>
-  </div>
+  </div></header><div class="search-area">  <div class="search-box"><input
+  id="searchInput"
+  type="search"
+  placeholder="🔍 ابحثي عن مانهوا..."
+>
 
-</header>
+<button id="searchButton">
+  بحث
+</button>
 
+  </div></div><main>  <!-- =========================
+       آخر الفصول
+  ========================== -->  <section class="latest-chapters"><div class="latest-chapters-title">
 
-<div class="search-area">
+  <h2>🆕 آخر الفصول</h2>
 
-  <div class="search-box">
+  <p>
+    أحدث الفصول المضافة إلى Sakura Tales 🌸
+  </p>
 
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="🔍 ابحثي عن مانهوا..."
-    >
+</div>
 
-    <button id="searchButton">
-      بحث
-    </button>
+<div
+  id="latestChapters"
+  class="chapters-list"
+>
 
+  <div class="latest-empty">
+    جاري تحميل آخر الفصول... 🌸
   </div>
 
 </div>
 
+  </section>  <div class="section-title"><h2>📚 أحدث المانهوا</h2>
 
-<main>
+<p>
+  اختاري قصتك المفضلة وابدئي القراءة 🌸
+</p>
 
-  <div class="section-title">
+  </div>  <!-- الفلاتر -->  <div class="filters"><button
+  class="filter-btn active"
+  data-filter="all">
+  الكل
+</button>
 
-    <h2>📚 أحدث المانهوا</h2>
+<button
+  class="filter-btn"
+  data-filter="مستمرة">
+  🟢 مستمرة
+</button>
 
-    <p>
-      اختاري قصتك المفضلة وابدئي القراءة 🌸
-    </p>
+<button
+  class="filter-btn"
+  data-filter="مكتملة">
+  🔵 مكتملة
+</button>
 
-  </div>
+<button
+  class="filter-btn"
+  data-filter="متوقفة">
+  🟡 متوقفة
+</button>
 
+  </div>  <div id="mangaList" class="grid"><div class="empty">
+  جاري تحميل المانهوا... 🌸
+</div>
 
-  <!-- الفلاتر -->
-
-  <div class="filters">
-
-    <button
-      class="filter-btn active"
-      data-filter="all">
-      الكل
-    </button>
-
-    <button
-      class="filter-btn"
-      data-filter="مستمرة">
-      🟢 مستمرة
-    </button>
-
-    <button
-      class="filter-btn"
-      data-filter="مكتملة">
-      🔵 مكتملة
-    </button>
-
-    <button
-      class="filter-btn"
-      data-filter="متوقفة">
-      🟡 متوقفة
-    </button>
-
-  </div>
-
-
-  <div id="mangaList" class="grid">
-
-    <div class="empty">
-      جاري تحميل المانهوا... 🌸
-    </div>
-
-  </div>
-
-</main>
-
-
-<footer>
-
-  🌸 Sakura Tales
-  <br>
+  </div></main><footer>🌸 Sakura Tales
+<br>
 
   <small>
     حكايات جميلة تبدأ من هنا 💗
-  </small>
-
-</footer>
-
-
-<script type="module">
+  </small></footer><script type="module">
 
   import { db } from "./firebase.js";
 
@@ -486,6 +566,9 @@
 
   const mangaList =
     document.getElementById("mangaList");
+
+  const latestChapters =
+    document.getElementById("latestChapters");
 
   const searchInput =
     document.getElementById("searchInput");
@@ -502,7 +585,289 @@
   let currentFilter = "all";
 
 
+  // ==========================================
+  // تحويل التاريخ إلى رقم للمقارنة بأمان
+  // ==========================================
+
+  function getDateValue(value) {
+
+    if (!value) {
+      return 0;
+    }
+
+    // Firebase Timestamp
+    if (
+      typeof value === "object" &&
+      typeof value.toMillis === "function"
+    ) {
+      return value.toMillis();
+    }
+
+    // Firebase Timestamp بصيغة seconds
+    if (
+      typeof value === "object" &&
+      typeof value.seconds === "number"
+    ) {
+      return value.seconds * 1000;
+    }
+
+    // تاريخ عادي
+    const date =
+      new Date(value).getTime();
+
+    return isNaN(date)
+      ? 0
+      : date;
+
+  }
+
+
+  // ==========================================
+  // الحصول على اسم الفصل
+  // ==========================================
+
+  function getChapterName(chapter) {
+
+    return (
+      chapter.title ||
+      chapter.name ||
+      chapter.chapterTitle ||
+      chapter.chapter ||
+      chapter.number ||
+      "فصل جديد"
+    );
+
+  }
+
+
+  // ==========================================
+  // تحميل آخر الفصول
+  // ==========================================
+
+  async function loadLatestChapters(mangaListData) {
+
+    try {
+
+      const chapters = [];
+
+
+      /*
+        نقرأ:
+
+        manga
+          └── اسم المانهوا
+                └── chapters
+      */
+
+      for (const manga of mangaListData) {
+
+        try {
+
+          const chaptersSnapshot =
+            await getDocs(
+              collection(
+                db,
+                "manga",
+                manga.id,
+                "chapters"
+              )
+            );
+
+
+          chaptersSnapshot.forEach((chapterDoc) => {
+
+            const chapterData =
+              chapterDoc.data();
+
+
+            const date =
+              chapterData.createdAt ||
+              chapterData.updatedAt ||
+              chapterData.date ||
+              chapterData.timestamp ||
+              null;
+
+
+            chapters.push({
+
+              id: chapterDoc.id,
+
+              mangaId: manga.id,
+
+              mangaTitle:
+                manga.title ||
+                "مانهوا بدون اسم",
+
+              cover:
+                manga.cover || "",
+
+              chapterName:
+                getChapterName(
+                  chapterData
+                ),
+
+              dateValue:
+                getDateValue(date)
+
+            });
+
+          });
+
+        } catch (chapterError) {
+
+          /*
+            إذا كانت مانهوا معينة لا تحتوي
+            على chapters أو حدث خطأ فيها،
+            نتجاهلها ونكمل بقية المانهوا.
+          */
+
+          console.warn(
+            "تعذر تحميل فصول:",
+            manga.id,
+            chapterError
+          );
+
+        }
+
+      }
+
+
+      // الأحدث أولًا
+
+      chapters.sort((a, b) => {
+
+        return b.dateValue - a.dateValue;
+
+      });
+
+
+      // نعرض أحدث 10 فصول فقط
+
+      const latest =
+        chapters.slice(0, 10);
+
+
+      displayLatestChapters(latest);
+
+
+    } catch (error) {
+
+      console.error(
+        "خطأ في تحميل آخر الفصول:",
+        error
+      );
+
+
+      latestChapters.innerHTML = `
+        <div class="latest-empty">
+          حدث خطأ أثناء تحميل آخر الفصول 🌸
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  // ==========================================
+  // عرض آخر الفصول
+  // ==========================================
+
+  function displayLatestChapters(chapters) {
+
+    latestChapters.innerHTML = "";
+
+
+    if (chapters.length === 0) {
+
+      latestChapters.innerHTML = `
+        <div class="latest-empty">
+          لا توجد فصول مضافة حتى الآن 🌸
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    chapters.forEach((chapter) => {
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "chapter-card";
+
+
+      card.innerHTML = `
+
+        <div class="chapter-info">
+
+          <div class="chapter-manga">
+            📖 ${chapter.mangaTitle}
+          </div>
+
+          <div class="chapter-name">
+            ${chapter.chapterName}
+          </div>
+
+          ${
+            chapter.dateValue
+              ? `
+                <div class="chapter-date">
+                  🕐 ${new Date(
+                    chapter.dateValue
+                  ).toLocaleDateString(
+                    "ar",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric"
+                    }
+                  )}
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+
+
+        <div class="chapter-badge">
+          🆕 قراءة
+        </div>
+
+      `;
+
+
+      // الضغط يفتح المانهوا
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          window.location.href =
+            "manga.html?id=" +
+            encodeURIComponent(
+              chapter.mangaId
+            );
+
+        }
+      );
+
+
+      latestChapters.appendChild(card);
+
+    });
+
+  }
+
+
+  // ==========================================
   // تحميل المانهوا
+  // ==========================================
 
   async function loadManga() {
 
@@ -530,10 +895,14 @@
       allManga.sort((a, b) => {
 
         const dateA =
-          new Date(a.createdAt || 0);
+          getDateValue(
+            a.createdAt
+          );
 
         const dateB =
-          new Date(b.createdAt || 0);
+          getDateValue(
+            b.createdAt
+          );
 
         return dateB - dateA;
 
@@ -541,6 +910,13 @@
 
 
       displayManga(allManga);
+
+
+      // بعد تحميل المانهوا نقرأ الفصول
+
+      loadLatestChapters(
+        allManga
+      );
 
 
     } catch (error) {
@@ -558,7 +934,9 @@
   }
 
 
+  // ==========================================
   // عرض المانهوا
+  // ==========================================
 
   function displayManga(list) {
 
@@ -688,7 +1066,9 @@
   }
 
 
+  // ==========================================
   // البحث + الفلترة
+  // ==========================================
 
   function search() {
 
@@ -744,7 +1124,9 @@
   }
 
 
+  // ==========================================
   // زر البحث
+  // ==========================================
 
   searchButton.addEventListener(
     "click",
@@ -752,7 +1134,9 @@
   );
 
 
+  // ==========================================
   // البحث المباشر
+  // ==========================================
 
   searchInput.addEventListener(
     "input",
@@ -760,40 +1144,8 @@
   );
 
 
+  // ==========================================
   // أزرار الحالة
+  // ==========================================
 
-  filterButtons.forEach((button) => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        filterButtons.forEach(
-          (btn) =>
-            btn.classList.remove("active")
-        );
-
-
-        button.classList.add("active");
-
-
-        currentFilter =
-          button.dataset.filter;
-
-
-        search();
-
-      }
-    );
-
-  });
-
-
-  // تشغيل الموقع
-
-  loadManga();
-
-</script>
-
-</body>
-</html>
+  filterButt
