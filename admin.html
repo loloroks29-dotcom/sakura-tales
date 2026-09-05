@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم | Sakura Tales</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff7fb;
+      color: #633f51;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffd6e8, #f5b5d1);
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #8f4668;
+      font-size: 24px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    #logoutBtn {
+      background: white;
+      color: #a84f78;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .box {
+      background: white;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 22px;
+      box-shadow: 0 5px 20px rgba(150, 70, 110, 0.12);
+    }
+
+    h2 {
+      color: #9b4770;
+      margin-top: 0;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 12px;
+      border: 1px solid #f0c5d8;
+      border-radius: 13px;
+      outline: none;
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .save {
+      width: 100%;
+      background: #d982aa;
+      color: white;
+    }
+
+    .save:hover {
+      background: #c96f9a;
+    }
+
+    .manga {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #f5d8e5;
+      border-radius: 15px;
+    }
+
+    .manga img {
+      width: 70px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .manga-info {
+      flex: 1;
+    }
+
+    .manga-info h3 {
+      margin: 0 0 6px;
+      color: #9b4770;
+    }
+
+    .delete {
+      background: #ffe2ec;
+      color: #a33f69;
+    }
+
+    #status {
+      margin-top: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🌸 Sakura Tales — لوحة التحكم</h1>
+    <button id="logoutBtn">تسجيل الخروج</button>
+  </header>
+
+  <main>
+
+    <section class="box">
+      <h2>➕ إضافة مانهوا جديدة</h2>
+
+      <input id="title" type="text" placeholder="اسم المانهوا">
+
+      <textarea id="description" placeholder="وصف المانهوا"></textarea>
+
+      <input id="genres" type="text" placeholder="التصنيف — مثال: Romance">
+
+      <input id="cover" type="url" placeholder="رابط صورة الغلاف">
+
+      <select id="status">
+        <option value="ongoing">مستمرة</option>
+        <option value="completed">مكتملة</option>
+      </select>
+
+      <br><br>
+
+      <button class="save" id="addBtn">حفظ المانهوا 🌸</button>
+
+      <div id="statusMessage"></div>
+    </section>
+
+    <section class="box">
+      <h2>📚 المانهوا الموجودة</h2>
+      <div id="mangaList">جاري التحميل...</div>
+    </section>
+
+  </main>
+
+  <script type="module">
+
+    import { auth } from "./firebase.js";
+
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmAhWySiFbc-RlcebvN6Z-Vw8uxm_sPsw",
+      authDomain: "sakura-tales.firebaseapp.com",
+      projectId: "sakura-tales",
+      storageBucket: "sakura-tales.firebasestorage.app",
+      messagingSenderId: "1052657784820",
+      appId: "1:1052657784820:web:f37da7b0098c47aadf0ba1"
+    };
+
+    const app = initializeApp(firebaseConfig, "adminApp");
+    const db = getFirestore(app);
+
+    const title = document.getElementById("title");
+    const description = document.getElementById("description");
+    const genres = document.getElementById("genres");
+    const cover = document.getElementById("cover");
+    const mangaStatus = document.getElementById("status");
+    const addBtn = document.getElementById("addBtn");
+    const mangaList = document.getElementById("mangaList");
+    const message = document.getElementById("statusMessage");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+
+    async function loadManga() {
+      mangaList.innerHTML = "جاري التحميل...";
+
+      try {
+        const snapshot = await getDocs(collection(db, "manga"));
+
+        if (snapshot.empty) {
+          mangaList.innerHTML = "لا توجد مانهوا حتى الآن 🌸";
+          return;
+        }
+
+        mangaList.innerHTML = "";
+
+        snapshot.forEach((item) => {
+          const data = item.data();
+
+          const div = document.createElement("div");
+          div.className = "manga";
+
+          div.innerHTML = `
+            <img src="${data.cover || ""}" alt="">
+            <div class="manga-info">
+              <h3>${data.title || "بدون اسم"}</h3>
+              <p>${data.genres || ""}</p>
+            </div>
+            <button class="delete">حذف</button>
+          `;
+
+          div.querySelector(".delete").addEventListener("click", async () => {
+            if (!confirm("هل تريدين حذف هذه المانهوا؟")) return;
+
+            await deleteDoc(doc(db, "manga", item.id));
+            loadManga();
+          });
+
+          mangaList.appendChild(div);
+        });
+
+      } catch (error) {
+        mangaList.innerHTML =
+          "حدث خطأ في تحميل المانهوا. تأكدي من إعدادات Firestore.";
+        console.error(error);
+      }
+    }
+
+    addBtn.addEventListener("click", async () => {
+
+      if (!title.value.trim() || !cover.value.trim()) {
+        message.textContent = "اكتبي اسم المانهوا ورابط الغلاف أولًا 🌸";
+        return;
+      }
+
+      try {
+
+        await addDoc(collection(db, "manga"), {
+          title: title.value.trim(),
+          description: description.value.trim(),
+          genres: genres.value.trim(),
+          cover: cover.value.trim(),
+          status: mangaStatus.value
+        });
+
+        message.textContent = "تمت إضافة المانهوا بنجاح 🌸";
+
+        title.value = "";
+        description.value = "";
+        genres.value = "";
+        cover.value = "";
+
+        loadManga();
+
+      } catch (error) {
+
+        message.textContent =
+          "ما قدرناش نحفظ المانهوا. راجعي قواعد Firestore.";
+
+        console.error(error);
+      }
+    });
+
+    loadManga();
+
+  </script>
+
+</body>
+</html> 
