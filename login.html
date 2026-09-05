@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول - حكايات ساكورا</title>
 
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff0f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .box {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 8px 25px #e8b6cc;
+      text-align: center;
+    }
+
+    h1 {
+      color: #d86b9c;
+    }
+
+    input {
+      width: 90%;
+      padding: 14px;
+      margin: 8px;
+      border: 1px solid #f0b8d0;
+      border-radius: 12px;
+    }
+
+    button {
+      width: 95%;
+      padding: 14px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #e889b1;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 15px;
+      color: #d64d7f;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h1>🌸 حكايات ساكورا</h1>
+    <p>لوحة التحكم</p>
+
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <input id="password" type="password" placeholder="كلمة المرور">
+
+    <button id="login">تسجيل الدخول</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script type="module">
+    import { signInWithEmailAndPassword }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    import { auth } from "./firebase.js";
+
+    document.getElementById("login").addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "admin.html";
+      } catch (error) {
+        message.textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+      }
+    });
+  </script>
+
+</body>
+</html>
