@@ -13,14 +13,14 @@
     }
 
     html {
-      background: #1d1720;
+      background: #181318;
       scroll-behavior: smooth;
     }
 
     body {
       margin: 0;
-      background: #1d1720;
-      color: #fff;
+      background: #181318;
+      color: white;
       font-family: Arial, sans-serif;
     }
 
@@ -29,178 +29,242 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(35, 25, 32, 0.96);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      padding: 10px;
+      background: rgba(35, 25, 32, 0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.12);
     }
 
     .topbar {
       max-width: 1000px;
       margin: auto;
+      min-height: 52px;
+      padding: 8px 12px;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
 
-    .logo {
-      color: #ffd6e7;
+    .logo,
+    .home {
+      color: #ffd8e8;
       text-decoration: none;
       font-weight: bold;
-      font-size: 15px;
       white-space: nowrap;
     }
 
-    .top-title {
-      color: #fff;
-      text-align: center;
+    .logo {
       font-size: 14px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .home {
-      color: #ffd6e7;
-      text-decoration: none;
       font-size: 13px;
+    }
+
+    .top-title {
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     /* عنوان الفصل */
     .chapter-title {
       text-align: center;
-      padding: 20px 10px;
-      background: #251c23;
+      padding: 18px 10px;
+      background: #241d24;
     }
 
     .chapter-title h1 {
       margin: 0;
-      color: #ffd6e7;
-      font-size: 21px;
+      color: #ffe0ec;
+      font-size: 22px;
+      font-weight: bold;
     }
 
     .chapter-title p {
-      margin: 7px 0 0;
-      color: #cbbbc4;
-      font-size: 14px;
+      margin: 8px 0 0;
+      color: #d8c8d0;
+      font-size: 15px;
     }
 
-    /* الصور */
+    /* صفحات المانهوا */
     .pages {
       width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      background: #111;
+      max-width: 1000px;
+      margin: auto;
+      background: #0d0b0d;
       line-height: 0;
+      text-align: center;
     }
 
     .page {
       display: block;
+
+      /*
+        الصورة لا تتجاوز حجمها الطبيعي،
+        ولا يتم تكبيرها بشكل يسبب تشوش الكلمات.
+      */
       width: 100%;
+      max-width: 1000px;
       height: auto;
-      margin: 0;
+
+      margin: 0 auto;
       padding: 0;
+
       border: 0;
-      outline: none;
-      background: #111;
+      outline: 0;
+
+      background: #0d0b0d;
+
+      /*
+        يحافظ على جودة الصورة قدر الإمكان
+      */
+      image-rendering: auto;
     }
 
-    /* التحميل */
+    /* شاشة التحميل والخطأ */
     .loading,
     .error {
-      min-height: 250px;
+      min-height: 280px;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       text-align: center;
-      color: #d9cbd2;
+
       padding: 30px;
-      line-height: 1.7;
+
+      color: #dfd1d8;
+      font-size: 16px;
+      line-height: 1.8;
     }
 
-    /* أزرار التنقل */
-    .navigation {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 18px 10px 30px;
-      background: #1d1720;
+    /* شريط الأزرار الثابت */
+    .fixed-navigation {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      z-index: 200;
+
+      background: rgba(30, 23, 29, 0.97);
+      backdrop-filter: blur(10px);
+
+      border-top: 1px solid rgba(255,255,255,.12);
+
+      padding: 8px;
+
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+
+      gap: 7px;
     }
 
-    .navigation a {
-      display: inline-block;
-      color: white;
+    .fixed-navigation a {
+      min-width: 105px;
+
+      text-align: center;
+
       background: #d96f9d;
+      color: white;
+
       text-decoration: none;
-      padding: 12px 16px;
+
+      padding: 11px 13px;
+
       border-radius: 12px;
-      font-weight: bold;
+
       font-size: 14px;
+      font-weight: bold;
+
+      box-shadow:
+        0 3px 10px rgba(0,0,0,.2);
     }
 
-    .navigation a:hover {
-      background: #c85d8d;
+    .fixed-navigation a:active {
+      transform: scale(.97);
     }
 
-    .navigation .chapters {
-      background: #f0b4cd;
-      color: #5f3d4c;
+    .fixed-navigation .chapters {
+      background: #f1b6cf;
+      color: #603d4d;
+    }
+
+    /* مساحة حتى لا يغطي الشريط آخر صورة */
+    .bottom-space {
+      height: 75px;
     }
 
     .end {
       text-align: center;
-      color: #a997a0;
-      font-size: 13px;
-      padding: 0 10px 35px;
+
+      color: #bcaab3;
+
+      font-size: 14px;
+
+      padding: 20px 10px 10px;
     }
 
     @media (max-width: 600px) {
 
       .topbar {
-        gap: 5px;
+        padding: 7px 8px;
       }
 
       .logo {
-        font-size: 13px;
+        font-size: 12px;
       }
 
       .home {
-        font-size: 12px;
+        font-size: 11px;
       }
 
       .top-title {
         font-size: 12px;
       }
 
-      .chapter-title {
-        padding: 15px 8px;
-      }
-
       .chapter-title h1 {
-        font-size: 18px;
+        font-size: 19px;
       }
 
-      .navigation {
-        padding: 15px 8px 25px;
+      .chapter-title p {
+        font-size: 14px;
       }
 
-      .navigation a {
-        padding: 11px 12px;
-        font-size: 13px;
+      .fixed-navigation {
+        padding: 7px 5px;
+      }
+
+      .fixed-navigation a {
+        min-width: 0;
+        flex: 1;
+
+        padding: 11px 5px;
+
+        font-size: 12px;
+      }
+
+      .bottom-space {
+        height: 70px;
       }
     }
   </style>
 </head>
 
+
 <body>
 
   <header>
+
     <div class="topbar">
 
       <a class="logo" href="index.html">
@@ -216,11 +280,16 @@
       </a>
 
     </div>
+
   </header>
 
 
   <section class="chapter-title" id="chapterTitle">
-    <h1>جاري تحميل الفصل... 📖</h1>
+
+    <h1>
+      جاري تحميل الفصل... 📖
+    </h1>
+
   </section>
 
 
@@ -233,12 +302,16 @@
   </main>
 
 
-  <nav class="navigation" id="navigation"></nav>
-
-
   <div class="end">
-    💗 نهاية الفصل — Sakura Tales
+    💗 نهاية الفصل
   </div>
+
+
+  <div class="bottom-space"></div>
+
+
+  <!-- الأزرار الثابتة -->
+  <nav class="fixed-navigation" id="navigation"></nav>
 
 
   <script type="module">
@@ -301,7 +374,7 @@
 
       try {
 
-        /* تحميل بيانات المانهوا */
+        /* تحميل المانهوا */
         const mangaRef =
           doc(db, "manga", mangaId);
 
@@ -319,7 +392,8 @@
             mangaSnap.data();
 
           mangaName =
-            manga.title || "Sakura Tales";
+            manga.title ||
+            "Sakura Tales";
 
         }
 
@@ -364,7 +438,7 @@
           chapter.number || "";
 
 
-        const name =
+        const chapterName =
           chapter.title || "";
 
 
@@ -375,8 +449,8 @@
           </h1>
 
           ${
-            name
-              ? `<p>${name}</p>`
+            chapterName
+              ? `<p>${chapterName}</p>`
               : ""
           }
 
@@ -395,7 +469,7 @@
           number;
 
 
-        /* عرض جميع صور الفصل */
+        /* عرض الصور */
         if (
           !Array.isArray(chapter.pages) ||
           chapter.pages.length === 0
@@ -403,7 +477,7 @@
 
           pages.innerHTML = `
             <div class="error">
-              لا توجد صور في هذا الفصل 📖
+              لا توجد صفحات في هذا الفصل 📖
             </div>
           `;
 
@@ -433,30 +507,26 @@
 
 
               /*
-                loading="eager"
-                للصور الأولى حتى تظهر
-                بسرعة أثناء القراءة.
+                أول 4 صور تتحمل بسرعة،
+                والباقي عند النزول لها.
               */
-              if (index < 3) {
-
-                img.loading = "eager";
-
-              } else {
-
-                img.loading = "lazy";
-
-              }
+              img.loading =
+                index < 4
+                  ? "eager"
+                  : "lazy";
 
 
-              img.decoding = "async";
+              img.decoding =
+                "async";
 
 
-              img.onerror = function() {
+              img.onerror =
+                function() {
 
-                this.style.display =
-                  "none";
+                  this.style.display =
+                    "none";
 
-              };
+                };
 
 
               pages.appendChild(img);
@@ -528,6 +598,7 @@
       let html = "";
 
 
+      /* السابق */
       if (currentIndex > 0) {
 
         const previous =
@@ -536,31 +607,39 @@
 
         html += `
 
-          <a href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(previous.id)}">
-
+          <a
+            href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(previous.id)}"
+          >
             ⬅️ السابق
-
           </a>
 
+        `;
+
+      } else {
+
+        html += `
+          <a style="opacity:.45; pointer-events:none;">
+            ⬅️ السابق
+          </a>
         `;
 
       }
 
 
+      /* الفصول */
       html += `
 
         <a
           class="chapters"
           href="manga.html?id=${encodeURIComponent(mangaId)}"
         >
-
           📚 الفصول
-
         </a>
 
       `;
 
 
+      /* التالي */
       if (
         currentIndex !== -1 &&
         currentIndex <
@@ -573,12 +652,20 @@
 
         html += `
 
-          <a href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(next.id)}">
-
+          <a
+            href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(next.id)}"
+          >
             التالي ➡️
-
           </a>
 
+        `;
+
+      } else {
+
+        html += `
+          <a style="opacity:.45; pointer-events:none;">
+            التالي ➡️
+          </a>
         `;
 
       }
