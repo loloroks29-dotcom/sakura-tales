@@ -11,6 +11,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -21,7 +25,7 @@
     header {
       position: relative;
       overflow: hidden;
-      padding: 55px 20px 45px;
+      padding: 55px 20px 55px;
       text-align: center;
       background: linear-gradient(
         135deg,
@@ -57,7 +61,7 @@
     .logo h1 {
       margin: 0;
       color: #8f4668;
-      font-size: 36px;
+      font-size: 38px;
     }
 
     .logo p {
@@ -67,8 +71,8 @@
     }
 
     .search-area {
-      max-width: 650px;
-      margin: -25px auto 30px;
+      max-width: 700px;
+      margin: -28px auto 25px;
       padding: 0 15px;
       position: relative;
       z-index: 2;
@@ -77,7 +81,7 @@
     .search-box {
       display: flex;
       background: white;
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 8px;
       box-shadow: 0 8px 25px rgba(150, 70, 110, .15);
     }
@@ -89,6 +93,8 @@
       padding: 13px;
       font-size: 15px;
       background: transparent;
+      color: #633f51;
+      min-width: 0;
     }
 
     .search-box button {
@@ -98,17 +104,22 @@
       background: #d96f9d;
       color: white;
       font-size: 15px;
+      cursor: pointer;
+    }
+
+    .search-box button:hover {
+      background: #c85d8d;
     }
 
     main {
       max-width: 1100px;
       margin: auto;
-      padding: 0 15px 40px;
+      padding: 0 15px 50px;
     }
 
     .section-title {
       text-align: center;
-      margin: 25px 0;
+      margin: 25px 0 20px;
     }
 
     .section-title h2 {
@@ -120,6 +131,39 @@
       color: #8b6878;
       margin-top: 0;
     }
+
+    /* الفلاتر */
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 25px;
+    }
+
+    .filter-btn {
+      border: 1px solid #efc4d7;
+      background: white;
+      color: #9b4770;
+      padding: 9px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: #d96f9d;
+      color: white;
+      border-color: #d96f9d;
+    }
+
+    /* شبكة المانهوا */
 
     .grid {
       display: grid;
@@ -136,7 +180,9 @@
       overflow: hidden;
       box-shadow: 0 6px 22px rgba(160, 80, 120, .12);
       cursor: pointer;
-      transition: transform .2s, box-shadow .2s;
+      transition:
+        transform .2s,
+        box-shadow .2s;
     }
 
     .card:hover {
@@ -147,6 +193,7 @@
     .cover-wrap {
       position: relative;
       background: #f8dce9;
+      overflow: hidden;
     }
 
     .card img {
@@ -154,18 +201,32 @@
       height: 260px;
       display: block;
       object-fit: cover;
+      transition: transform .3s;
+    }
+
+    .card:hover img {
+      transform: scale(1.03);
     }
 
     .status {
       position: absolute;
       top: 10px;
       right: 10px;
-      background: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.94);
       color: #9b4770;
       padding: 6px 10px;
       border-radius: 10px;
       font-size: 12px;
       font-weight: bold;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    }
+
+    .status.completed {
+      color: #4b8a68;
+    }
+
+    .status.paused {
+      color: #b27a3c;
     }
 
     .card-content {
@@ -176,12 +237,19 @@
       color: #9b4770;
       margin: 0 0 9px;
       font-size: 18px;
+      line-height: 1.4;
     }
 
     .description {
       color: #806372;
       font-size: 13px;
       line-height: 1.6;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+
       min-height: 42px;
     }
 
@@ -199,24 +267,82 @@
       border-radius: 18px;
       padding: 45px 20px;
       color: #8b6878;
+      box-shadow: 0 5px 18px rgba(160, 80, 120, .08);
     }
 
     footer {
       text-align: center;
-      padding: 25px;
+      padding: 28px 15px;
       background: #ffe8f1;
       color: #8f4668;
     }
 
+    footer small {
+      line-height: 2;
+    }
+
+    /* الهاتف */
+
     @media (max-width: 600px) {
+
+      header {
+        padding: 45px 15px 50px;
+      }
 
       .logo h1 {
         font-size: 29px;
       }
 
+      .logo p {
+        font-size: 14px;
+      }
+
+      .search-area {
+        margin-top: -24px;
+      }
+
+      .search-box {
+        padding: 6px;
+      }
+
+      .search-box input {
+        padding: 12px 9px;
+        font-size: 14px;
+      }
+
+      .search-box button {
+        padding: 0 14px;
+      }
+
+      main {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .section-title {
+        margin-top: 20px;
+      }
+
+      .section-title h2 {
+        font-size: 21px;
+      }
+
+      .filters {
+        gap: 6px;
+      }
+
+      .filter-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
       .grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+      }
+
+      .card {
+        border-radius: 16px;
       }
 
       .card img {
@@ -233,10 +359,18 @@
 
       .description {
         font-size: 12px;
+        line-height: 1.5;
       }
 
-      .search-box button {
-        padding: 0 14px;
+      .genres {
+        font-size: 11px;
+      }
+
+      .status {
+        top: 7px;
+        right: 7px;
+        padding: 5px 8px;
+        font-size: 10px;
       }
     }
   </style>
@@ -286,6 +420,37 @@
   </div>
 
 
+  <!-- الفلاتر -->
+
+  <div class="filters">
+
+    <button
+      class="filter-btn active"
+      data-filter="all">
+      الكل
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="مستمرة">
+      🟢 مستمرة
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="مكتملة">
+      🔵 مكتملة
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="متوقفة">
+      🟡 متوقفة
+    </button>
+
+  </div>
+
+
   <div id="mangaList" class="grid">
 
     <div class="empty">
@@ -301,7 +466,10 @@
 
   🌸 Sakura Tales
   <br>
-  <small>حكايات جميلة تبدأ من هنا 💗</small>
+
+  <small>
+    حكايات جميلة تبدأ من هنا 💗
+  </small>
 
 </footer>
 
@@ -325,9 +493,16 @@
   const searchButton =
     document.getElementById("searchButton");
 
+  const filterButtons =
+    document.querySelectorAll(".filter-btn");
+
 
   let allManga = [];
 
+  let currentFilter = "all";
+
+
+  // تحميل المانهوا
 
   async function loadManga() {
 
@@ -383,6 +558,8 @@
   }
 
 
+  // عرض المانهوا
+
   function displayManga(list) {
 
     mangaList.innerHTML = "";
@@ -392,7 +569,9 @@
 
       mangaList.innerHTML = `
         <div class="empty">
-          لم نجد مانهوا بهذا الاسم 🌸
+          لم نجد مانهوا بهذا البحث 🌸
+          <br>
+          جربي اسمًا أو تصنيفًا آخر 💗
         </div>
       `;
 
@@ -415,6 +594,24 @@
           : data.genres || "";
 
 
+      const mangaStatus =
+        data.status || "غير محددة";
+
+
+      let statusClass = "";
+
+
+      if (mangaStatus === "مكتملة") {
+
+        statusClass = "completed";
+
+      } else if (mangaStatus === "متوقفة") {
+
+        statusClass = "paused";
+
+      }
+
+
       card.innerHTML = `
 
         <div class="cover-wrap">
@@ -425,6 +622,7 @@
                 <img
                   src="${data.cover}"
                   alt="${data.title || "مانهوا"}"
+                  loading="lazy"
                 >
               `
               : `
@@ -442,8 +640,8 @@
               `
           }
 
-          <div class="status">
-            ${data.status || "غير محددة"}
+          <div class="status ${statusClass}">
+            ${mangaStatus}
           </div>
 
         </div>
@@ -459,9 +657,15 @@
             ${data.description || "لا يوجد وصف."}
           </div>
 
-          <div class="genres">
-            ${genres}
-          </div>
+          ${
+            genres
+              ? `
+                <div class="genres">
+                  🏷️ ${genres}
+                </div>
+              `
+              : ""
+          }
 
         </div>
 
@@ -484,21 +688,14 @@
   }
 
 
+  // البحث + الفلترة
+
   function search() {
 
     const value =
       searchInput.value
         .trim()
         .toLowerCase();
-
-
-    if (!value) {
-
-      displayManga(allManga);
-
-      return;
-
-    }
 
 
     const filtered =
@@ -517,10 +714,26 @@
             ? manga.genres.join(" ").toLowerCase()
             : "";
 
-        return (
+
+        const status =
+          manga.status || "";
+
+
+        const matchesSearch =
+          !value ||
           title.includes(value) ||
           description.includes(value) ||
-          genres.includes(value)
+          genres.includes(value);
+
+
+        const matchesFilter =
+          currentFilter === "all" ||
+          status === currentFilter;
+
+
+        return (
+          matchesSearch &&
+          matchesFilter
         );
 
       });
@@ -531,17 +744,52 @@
   }
 
 
+  // زر البحث
+
   searchButton.addEventListener(
     "click",
     search
   );
 
 
+  // البحث المباشر
+
   searchInput.addEventListener(
     "input",
     search
   );
 
+
+  // أزرار الحالة
+
+  filterButtons.forEach((button) => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        filterButtons.forEach(
+          (btn) =>
+            btn.classList.remove("active")
+        );
+
+
+        button.classList.add("active");
+
+
+        currentFilter =
+          button.dataset.filter;
+
+
+        search();
+
+      }
+    );
+
+  });
+
+
+  // تشغيل الموقع
 
   loadManga();
 
