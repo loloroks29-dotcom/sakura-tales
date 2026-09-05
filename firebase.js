@@ -3,7 +3,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "ضعي_API_KEY_هنا",
+  apiKey: "AIzaSyDmAhWySiFbc-RlcebvN6Z-Vw8uxm_sPsw",
   authDomain: "sakura-tales.firebaseapp.com",
   projectId: "sakura-tales",
   storageBucket: "sakura-tales.firebasestorage.app",
