@@ -4,8 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>قراءة | Sakura Tales</title>
+  <title>Sakura Tales</title>
 
   <style>
     * {
@@ -14,285 +13,249 @@
 
     body {
       margin: 0;
+      font-family: Arial, sans-serif;
       background: #fff7fb;
       color: #633f51;
-      font-family: Arial, sans-serif;
     }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(255, 222, 235, 0.96);
-      padding: 14px;
+      background: linear-gradient(135deg, #ffd9e9, #efa8c7);
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 2px 12px rgba(120, 60, 90, 0.12);
     }
 
     header a {
-      color: #914665;
+      color: #8f4668;
       text-decoration: none;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 15px 50px;
+    }
+
+    .info {
+      background: white;
+      border-radius: 24px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 7px 25px rgba(160, 80, 120, .12);
+      margin-bottom: 22px;
+    }
+
+    .cover {
+      width: 200px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 18px;
+    }
+
+    h1 {
+      color: #9b4770;
+    }
+
+    .genres {
+      color: #b15c82;
+      margin: 10px 0;
+    }
+
+    .description {
+      line-height: 1.9;
+      max-width: 650px;
+      margin: 15px auto;
+    }
+
+    .status {
+      display: inline-block;
+      background: #ffe5ef;
+      color: #9b4770;
+      padding: 7px 13px;
+      border-radius: 12px;
+    }
+
+    .chapters {
+      background: white;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 7px 25px rgba(160, 80, 120, .12);
+    }
+
+    .chapters h2 {
+      text-align: center;
+      color: #a64f78;
+    }
+
+    .chapter {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      margin: 10px 0;
+      background: #fff8fb;
+      border: 1px solid #f2d4e1;
+      border-radius: 15px;
+      gap: 10px;
+    }
+
+    .chapter-name {
       font-weight: bold;
     }
 
-    .title {
-      text-align: center;
-      padding: 20px 10px 10px;
-    }
-
-    .title h1 {
-      color: #a34d76;
-      margin: 5px;
-      font-size: 22px;
-    }
-
-    .title p {
-      color: #8a6677;
-      margin: 8px;
-    }
-
-    .pages {
-      width: 100%;
-      max-width: 900px;
-      margin: auto;
-      padding: 0;
-    }
-
-    .page {
-      display: block;
-      width: 100%;
-      height: auto;
-      margin: 0 auto;
-      padding: 0;
-      border: 0;
-    }
-
-    .loading,
-    .error {
-      text-align: center;
-      padding: 50px 15px;
-      color: #8b6878;
-    }
-
-    .navigation {
-      max-width: 900px;
-      margin: 25px auto 45px;
-      padding: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .navigation a {
+    .read {
       background: #d96f9d;
       color: white;
       text-decoration: none;
-      padding: 12px 18px;
-      border-radius: 13px;
-      font-weight: bold;
+      padding: 10px 16px;
+      border-radius: 11px;
+      white-space: nowrap;
     }
 
-    .navigation a:hover {
-      background: #c85d8d;
-    }
-
-    .navigation .chapters {
-      background: #f1b3cc;
-      color: #70485a;
-    }
-
-    .bottom {
+    .empty {
       text-align: center;
-      color: #9b7182;
-      padding-bottom: 30px;
+      padding: 30px;
     }
 
-    @media (max-width: 600px) {
-      .title h1 {
-        font-size: 19px;
-      }
-
-      .navigation a {
-        padding: 11px 13px;
-        font-size: 14px;
-      }
+    .back {
+      display: inline-block;
+      margin-top: 20px;
+      color: #9b4770;
+      text-decoration: none;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <a href="index.html">🌸 Sakura Tales</a>
-  </header>
+<header>
+  <a href="index.html">🌸 Sakura Tales</a>
+</header>
 
-  <div class="title" id="title">
-    جاري تحميل الفصل... 🌸
-  </div>
+<main>
 
-  <div class="pages" id="pages">
-    <div class="loading">
-      جاري تحميل صفحات الفصل... 📖
+  <section class="info" id="mangaInfo">
+    جاري تحميل المانهوا... 🌸
+  </section>
+
+  <section class="chapters">
+    <h2>📖 فصول المانهوا</h2>
+    <div id="chapterList">
+      جاري تحميل الفصول...
     </div>
-  </div>
+  </section>
 
-  <div class="navigation" id="navigation"></div>
+  <a class="back" href="index.html">
+    ← العودة للرئيسية
+  </a>
 
-  <div class="bottom">
-    💗 شكراً لقراءتك في Sakura Tales
-  </div>
+</main>
 
-  <script type="module">
+<script type="module">
 
-    import { db } from "./firebase.js";
+  import { db } from "./firebase.js";
 
-    import {
-      doc,
-      getDoc,
-      collection,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-    const params = new URLSearchParams(
-      window.location.search
-    );
-
-    const mangaId = params.get("id");
-    const chapterId = params.get("chapter");
-
-    const title = document.getElementById("title");
-    const pages = document.getElementById("pages");
-    const navigation = document.getElementById("navigation");
+  import {
+    doc,
+    getDoc,
+    collection,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-    if (!mangaId || !chapterId) {
+  const params = new URLSearchParams(
+    window.location.search
+  );
 
-      pages.innerHTML = `
-        <div class="error">
-          لم يتم تحديد الفصل 🌸
-        </div>
-      `;
+  const mangaId = params.get("id");
 
-    } else {
+  const mangaInfo =
+    document.getElementById("mangaInfo");
 
-      loadChapter();
+  const chapterList =
+    document.getElementById("chapterList");
 
+
+  if (!mangaId) {
+
+    mangaInfo.innerHTML =
+      "لم يتم تحديد المانهوا 🌸";
+
+    chapterList.innerHTML = "";
+
+  } else {
+
+    loadManga();
+    loadChapters();
+
+  }
+
+
+  async function loadManga() {
+
+    const mangaRef =
+      doc(db, "manga", mangaId);
+
+    const mangaSnap =
+      await getDoc(mangaRef);
+
+
+    if (!mangaSnap.exists()) {
+
+      mangaInfo.innerHTML =
+        "المانهوا غير موجودة 🌸";
+
+      return;
     }
 
 
-    async function loadChapter() {
-
-      try {
-
-        // تحميل بيانات الفصل
-        const chapterRef = doc(
-          db,
-          "manga",
-          mangaId,
-          "chapters",
-          chapterId
-        );
-
-        const chapterSnap = await getDoc(
-          chapterRef
-        );
+    const data = mangaSnap.data();
 
 
-        if (!chapterSnap.exists()) {
-
-          pages.innerHTML = `
-            <div class="error">
-              الفصل غير موجود 🌸
-            </div>
-          `;
-
-          return;
-        }
+    const genres =
+      Array.isArray(data.genres)
+        ? data.genres.join(" • ")
+        : data.genres || "";
 
 
-        const chapter = chapterSnap.data();
+    mangaInfo.innerHTML = `
 
-
-        title.innerHTML = `
-          <h1>
-            📖 الفصل ${chapter.number || ""}
-          </h1>
-
-          ${
-            chapter.title
-              ? `<p>${chapter.title}</p>`
-              : ""
-          }
-        `;
-
-
-        document.title =
-          `الفصل ${chapter.number || ""} | Sakura Tales`;
-
-
-        // عرض الصور واحدة تحت الثانية
-        if (
-          !chapter.pages ||
-          !Array.isArray(chapter.pages) ||
-          chapter.pages.length === 0
-        ) {
-
-          pages.innerHTML = `
-            <div class="error">
-              لا توجد صفحات في هذا الفصل 📖
-            </div>
-          `;
-
-        } else {
-
-          pages.innerHTML = "";
-
-          chapter.pages.forEach(
-            (imageUrl, index) => {
-
-              const img =
-                document.createElement("img");
-
-              img.className = "page";
-
-              img.src = imageUrl;
-
-              img.alt =
-                `صفحة ${index + 1}`;
-
-              img.loading = "lazy";
-
-              pages.appendChild(img);
-
-            }
-          );
-
-        }
-
-
-        // تحميل كل الفصول
-        await loadNavigation();
-
-      } catch (error) {
-
-        console.error(error);
-
-        pages.innerHTML = `
-          <div class="error">
-            حدث خطأ أثناء تحميل الفصل 🌸
-          </div>
-        `;
-
+      ${
+        data.cover
+          ? `<img
+              class="cover"
+              src="${data.cover}"
+              alt="${data.title || ""}"
+            >`
+          : ""
       }
 
-    }
+      <h1>${data.title || "بدون اسم"}</h1>
+
+      <div class="status">
+        ${data.status || "غير محددة"}
+      </div>
+
+      <div class="genres">
+        ${genres}
+      </div>
+
+      <div class="description">
+        ${data.description || "لا يوجد وصف."}
+      </div>
+    `;
 
 
-    async function loadNavigation() {
+    document.title =
+      data.title || "Sakura Tales";
+  }
 
-      const snapshot = await getDocs(
+
+  async function loadChapters() {
+
+    const snapshot =
+      await getDocs(
         collection(
           db,
           "manga",
@@ -302,86 +265,95 @@
       );
 
 
-      const chapters = [];
+    if (snapshot.empty) {
 
-      snapshot.forEach(item => {
+      chapterList.innerHTML = `
+        <div class="empty">
+          لا توجد فصول حتى الآن 📖🌸
+        </div>
+      `;
 
-        chapters.push({
-          id: item.id,
-          ...item.data()
-        });
+      return;
+    }
 
+
+    const chapters = [];
+
+
+    snapshot.forEach(item => {
+
+      chapters.push({
+        id: item.id,
+        ...item.data()
       });
 
-
-      // ترتيب الفصول من الأصغر للأكبر
-      chapters.sort(
-        (a, b) =>
-          Number(a.number) -
-          Number(b.number)
-      );
+    });
 
 
-      const currentIndex =
-        chapters.findIndex(
-          chapter =>
-            chapter.id === chapterId
+    chapters.sort(
+      (a, b) =>
+        Number(a.number) -
+        Number(b.number)
+    );
+
+
+    chapterList.innerHTML = "";
+
+
+    chapters.forEach(chapter => {
+
+      const div =
+        document.createElement("div");
+
+      div.className = "chapter";
+
+
+      const link =
+        document.createElement("a");
+
+      link.className = "read";
+
+      link.textContent = "قراءة 💗";
+
+
+      /*
+        هنا نرسل رقم المانهوا
+        ورقم الفصل إلى reader.html
+      */
+
+      link.href =
+        "./reader.html?id=" +
+        encodeURIComponent(mangaId) +
+        "&chapter=" +
+        encodeURIComponent(chapter.id);
+
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "chapter-name";
+
+      name.textContent =
+        "📖 الفصل " +
+        (chapter.number || "") +
+        (
+          chapter.title
+            ? " — " + chapter.title
+            : ""
         );
 
 
-      let html = "";
+      div.appendChild(name);
+      div.appendChild(link);
 
+      chapterList.appendChild(div);
 
-      // الفصل السابق
-      if (currentIndex > 0) {
+    });
 
-        const previous =
-          chapters[currentIndex - 1];
+  }
 
-        html += `
-          <a href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(previous.id)}">
-            ⬅️ الفصل السابق
-          </a>
-        `;
-
-      }
-
-
-      // زر الفصول
-      html += `
-        <a
-          class="chapters"
-          href="manga.html?id=${encodeURIComponent(mangaId)}"
-        >
-          📚 الفصول
-        </a>
-      `;
-
-
-      // الفصل التالي
-      if (
-        currentIndex !== -1 &&
-        currentIndex < chapters.length - 1
-      ) {
-
-        const next =
-          chapters[currentIndex + 1];
-
-        html += `
-          <a href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(next.id)}">
-            الفصل التالي ➡️
-          </a>
-        `;
-
-      }
-
-
-      navigation.innerHTML = html;
-
-    }
-
-  </script>
+</script>
 
 </body>
-
 </html>
