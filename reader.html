@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>القراءة | Sakura Tales</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #171217;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(30,20,27,.96);
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #493340;
+    }
+
+    header a {
+      color: #ffd2e5;
+      text-decoration: none;
+    }
+
+    .chapter-title {
+      margin: 8px 0 0;
+      color: #ffd2e5;
+    }
+
+    .pages {
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .page {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .loading {
+      padding: 60px 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .error {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 25px 15px;
+    }
+
+    .buttons a {
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: #d96f9d;
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .pages {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <a id="backLink" href="index.html">
+    🌸 Sakura Tales
+  </a>
+
+  <div class="chapter-title" id="chapterTitle">
+    جاري التحميل...
+  </div>
+
+</header>
+
+
+<main>
+
+  <div id="pages" class="pages">
+
+    <div class="loading">
+      جاري تحميل الفصل 📖...
+    </div>
+
+  </div>
+
+
+  <div class="buttons">
+
+    <a id="mangaLink" href="#">
+      📚 قائمة الفصول
+    </a>
+
+  </div>
+
+</main>
+
+
+<script type="module">
+
+  import { db } from "./firebase.js";
+
+  import {
+    doc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+
+  const mangaId =
+    params.get("id");
+
+  const chapterId =
+    params.get("chapter");
+
+
+  const pages =
+    document.getElementById("pages");
+
+  const chapterTitle =
+    document.getElementById("chapterTitle");
+
+  const mangaLink =
+    document.getElementById("mangaLink");
+
+
+  if (!mangaId || !chapterId) {
+
+    pages.innerHTML =
+      '<div class="error">رابط الفصل غير صحيح 🌸</div>';
+
+  } else {
+
+    mangaLink.href =
+      "manga.html?id=" +
+      encodeURIComponent(mangaId);
+
+    loadChapter();
+
+  }
+
+
+  async function loadChapter() {
+
+    try {
+
+      const chapterRef =
+        doc(
+          db,
+          "manga",
+          mangaId,
+          "chapters",
+          chapterId
+        );
+
+
+      const chapterSnap =
+        await getDoc(chapterRef);
+
+
+      if (!chapterSnap.exists()) {
+
+        pages.innerHTML =
+          '<div class="error">الفصل غير موجود 🌸</div>';
+
+        return;
+
+      }
+
+
+      const data =
+        chapterSnap.data();
+
+
+      chapterTitle.textContent =
+        "الفصل " +
+        (data.number || "") +
+        (
+          data.title
+            ? " — " + data.title
+            : ""
+        );
+
+
+      document.title =
+        "الفصل " +
+        (data.number || "") +
+        " | Sakura Tales";
+
+
+      if (
+        !Array.isArray(data.pages) ||
+        data.pages.length === 0
+      ) {
+
+        pages.innerHTML =
+          '<div class="error">لا توجد صفحات في هذا الفصل 📖</div>';
+
+        return;
+
+      }
+
+
+      pages.innerHTML = "";
+
+
+      data.pages.forEach((url, index) => {
+
+        const img =
+          document.createElement("img");
+
+        img.className = "page";
+
+        img.src = url;
+
+        img.alt =
+          "صفحة " + (index + 1);
+
+        img.loading =
+          index < 2
+            ? "eager"
+            : "lazy";
+
+
+        img.onerror = () => {
+
+          img.alt =
+            "تعذر تحميل الصفحة " +
+            (index + 1);
+
+          img.style.minHeight = "150px";
+
+        };
+
+
+        pages.appendChild(img);
+
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      pages.innerHTML =
+        '<div class="error">حدث خطأ في تحميل الفصل 🌸</div>';
+
+    }
+
+  }
+
+</script>
+
+</body>
+</html>
