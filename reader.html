@@ -13,19 +13,24 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html {
       margin: 0;
       padding: 0;
+      scroll-behavior: auto;
       background: #fff7fb;
-      color: #4a3040;
-      font-family: Arial, sans-serif;
     }
 
     body {
-      padding-bottom: 80px;
+      margin: 0;
+      padding: 0 0 85px;
+      background: #fff7fb;
+      color: #4a3040;
+      font-family: Arial, sans-serif;
       overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
+    /* الشريط العلوي */
     .topbar {
       position: sticky;
       top: 0;
@@ -53,36 +58,49 @@
       font-size: 14px;
     }
 
+    /* منطقة الصور */
     #pages {
       width: 100%;
-      margin: 0 auto;
+      margin: 0;
       padding: 0;
       text-align: center;
     }
 
+    /* كل صورة */
     .page {
       display: block;
 
-      /* الصورة الأصلية بدون فلتر أو ضغط من الموقع */
-      width: auto;
+      width: 100%;
       max-width: 100%;
       height: auto;
 
-      margin: 0 auto;
+      margin: 0;
       padding: 0;
 
       border: 0;
       box-shadow: none;
 
+      /* لا يوجد فلتر أو ضغط أو تعديل للصورة */
+      filter: none;
+      transform: none;
       image-rendering: auto;
 
-      /* يسمح بالسحب العمودي بإصبع واحد والتكبير بإصبعين */
+      /*
+        أهم شيء:
+        إصبع واحد = سحب الصفحة بشكل طبيعي
+        إصبعان = تكبير
+      */
       touch-action: pan-y pinch-zoom;
 
-      user-select: none;
+      /*
+        يمنع المتصفح من اعتبار الصورة عنصرًا
+        يتم سحبه بدل تحريك الصفحة.
+      */
       -webkit-user-drag: none;
+      user-select: none;
     }
 
+    /* شريط الأزرار */
     .bottom-nav {
       position: fixed;
       left: 0;
@@ -92,6 +110,7 @@
 
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 8px;
 
       padding: 10px;
@@ -132,8 +151,13 @@
     }
 
     @media (max-width: 600px) {
+
       #mangaTitle {
         font-size: 16px;
+      }
+
+      #chapterTitle {
+        font-size: 13px;
       }
 
       .bottom-nav button,
@@ -149,7 +173,9 @@
 
   <header class="topbar">
     <a href="./index.html">🌸 Sakura Tales</a>
+
     <div id="mangaTitle">جاري التحميل...</div>
+
     <div id="chapterTitle"></div>
   </header>
 
@@ -158,12 +184,23 @@
   </main>
 
   <nav class="bottom-nav">
-    <button id="prevBtn">الفصل السابق</button>
-    <a id="chaptersBtn" href="#">الفصول</a>
-    <button id="nextBtn">الفصل التالي</button>
+
+    <button id="prevBtn">
+      الفصل السابق
+    </button>
+
+    <a id="chaptersBtn" href="#">
+      الفصول
+    </a>
+
+    <button id="nextBtn">
+      الفصل التالي
+    </button>
+
   </nav>
 
   <script type="module">
+
     import { db } from "./firebase.js";
 
     import {
@@ -173,168 +210,349 @@
       getDocs
     } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    const params = new URLSearchParams(window.location.search);
+
+    const params = new URLSearchParams(
+      window.location.search
+    );
 
     const mangaId = params.get("id");
     const chapterId = params.get("chapter");
 
-    const mangaTitle = document.getElementById("mangaTitle");
-    const chapterTitle = document.getElementById("chapterTitle");
-    const pagesContainer = document.getElementById("pages");
 
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const chaptersBtn = document.getElementById("chaptersBtn");
+    const mangaTitle =
+      document.getElementById("mangaTitle");
+
+    const chapterTitle =
+      document.getElementById("chapterTitle");
+
+    const pagesContainer =
+      document.getElementById("pages");
+
+    const prevBtn =
+      document.getElementById("prevBtn");
+
+    const nextBtn =
+      document.getElementById("nextBtn");
+
+    const chaptersBtn =
+      document.getElementById("chaptersBtn");
+
 
     if (!mangaId || !chapterId) {
+
       pagesContainer.innerHTML =
         '<div class="error">الرابط غير صحيح 💔</div>';
+
     } else {
+
       loadReader();
+
     }
 
+
     async function loadReader() {
+
       try {
-        const mangaRef = doc(db, "manga", mangaId);
-        const mangaSnap = await getDoc(mangaRef);
+
+        /* بيانات المانهوا */
+
+        const mangaRef =
+          doc(db, "manga", mangaId);
+
+        const mangaSnap =
+          await getDoc(mangaRef);
+
 
         if (!mangaSnap.exists()) {
-          throw new Error("Manga not found");
+
+          throw new Error(
+            "Manga not found"
+          );
+
         }
 
-        const manga = mangaSnap.data();
 
-        mangaTitle.textContent = manga.title || "Sakura Tales";
+        const manga =
+          mangaSnap.data();
+
+
+        mangaTitle.textContent =
+          manga.title ||
+          "Sakura Tales";
+
 
         chaptersBtn.href =
-          "./manga.html?id=" + encodeURIComponent(mangaId);
+          "./manga.html?id=" +
+          encodeURIComponent(mangaId);
 
-        const chapterRef = doc(
-          db,
-          "manga",
-          mangaId,
-          "chapters",
-          chapterId
-        );
 
-        const chapterSnap = await getDoc(chapterRef);
+        /* بيانات الفصل */
+
+        const chapterRef =
+          doc(
+            db,
+            "manga",
+            mangaId,
+            "chapters",
+            chapterId
+          );
+
+
+        const chapterSnap =
+          await getDoc(chapterRef);
+
 
         if (!chapterSnap.exists()) {
-          throw new Error("Chapter not found");
+
+          throw new Error(
+            "Chapter not found"
+          );
+
         }
 
+
         const currentChapter = {
+
           id: chapterSnap.id,
+
           ...chapterSnap.data()
+
         };
+
 
         chapterTitle.textContent =
           "الفصل " +
           (currentChapter.number ?? "") +
-          (currentChapter.title
-            ? " — " + currentChapter.title
-            : "");
 
-        const pages = Array.isArray(currentChapter.pages)
-          ? currentChapter.pages
-          : [];
+          (
+            currentChapter.title
+              ? " — " +
+                currentChapter.title
+              : ""
+          );
+
+
+        /* صفحات الفصل */
+
+        const pages =
+          Array.isArray(
+            currentChapter.pages
+          )
+            ? currentChapter.pages
+            : [];
+
 
         pagesContainer.innerHTML = "";
 
+
         if (pages.length === 0) {
+
           pagesContainer.innerHTML =
             '<div class="error">لا توجد صفحات في هذا الفصل 💔</div>';
+
         } else {
-          pages.forEach((url, index) => {
-            if (!url) return;
 
-            const img = document.createElement("img");
+          pages.forEach(
+            (url, index) => {
 
-            img.className = "page";
-            img.src = url;
-            img.alt = "صفحة " + (index + 1);
+              if (!url) return;
 
-            if (index >= 3) {
-              img.loading = "lazy";
-            } else {
-              img.loading = "eager";
+
+              const img =
+                document.createElement(
+                  "img"
+                );
+
+
+              img.className =
+                "page";
+
+
+              /*
+                نستخدم الرابط الأصلي
+                كما هو بدون تغيير.
+              */
+
+              img.src = url;
+
+
+              img.alt =
+                "صفحة " +
+                (index + 1);
+
+
+              /*
+                تحميل أول الصور بسرعة.
+              */
+
+              img.loading =
+                index < 3
+                  ? "eager"
+                  : "lazy";
+
+
+              img.decoding =
+                "async";
+
+
+              /*
+                منع أي معالجة
+                للصورة.
+              */
+
+              img.style.filter =
+                "none";
+
+              img.style.transform =
+                "none";
+
+
+              pagesContainer.appendChild(
+                img
+              );
+
             }
-
-            img.decoding = "async";
-
-            img.style.filter = "none";
-            img.style.transform = "none";
-
-            pagesContainer.appendChild(img);
-          });
-        }
-
-        const chaptersRef = collection(
-          db,
-          "manga",
-          mangaId,
-          "chapters"
-        );
-
-        const chaptersSnap = await getDocs(chaptersRef);
-
-        const chapters = chaptersSnap.docs
-          .map(docSnap => ({
-            id: docSnap.id,
-            ...docSnap.data()
-          }))
-          .sort(
-            (a, b) =>
-              Number(a.number || 0) -
-              Number(b.number || 0)
           );
 
-        const currentIndex = chapters.findIndex(
-          chapter => chapter.id === chapterId
-        );
+        }
+
+
+        /* جميع الفصول */
+
+        const chaptersRef =
+          collection(
+            db,
+            "manga",
+            mangaId,
+            "chapters"
+          );
+
+
+        const chaptersSnap =
+          await getDocs(
+            chaptersRef
+          );
+
+
+        const chapters =
+          chaptersSnap.docs
+
+            .map(docSnap => ({
+
+              id: docSnap.id,
+
+              ...docSnap.data()
+
+            }))
+
+            .sort(
+              (a, b) =>
+                Number(a.number || 0) -
+                Number(b.number || 0)
+            );
+
+
+        const currentIndex =
+          chapters.findIndex(
+            chapter =>
+              chapter.id === chapterId
+          );
+
+
+        /* الفصل السابق */
 
         if (currentIndex > 0) {
-          const previousChapter = chapters[currentIndex - 1];
 
-          prevBtn.disabled = false;
+          const previousChapter =
+            chapters[
+              currentIndex - 1
+            ];
+
+
+          prevBtn.disabled =
+            false;
+
 
           prevBtn.onclick = () => {
+
             window.location.href =
               "./reader.html?id=" +
-              encodeURIComponent(mangaId) +
+
+              encodeURIComponent(
+                mangaId
+              ) +
+
               "&chapter=" +
-              encodeURIComponent(previousChapter.id);
+
+              encodeURIComponent(
+                previousChapter.id
+              );
+
           };
+
         } else {
-          prevBtn.disabled = true;
+
+          prevBtn.disabled =
+            true;
+
         }
+
+
+        /* الفصل التالي */
 
         if (
           currentIndex !== -1 &&
-          currentIndex < chapters.length - 1
+          currentIndex <
+            chapters.length - 1
         ) {
-          const nextChapter = chapters[currentIndex + 1];
 
-          nextBtn.disabled = false;
+          const nextChapter =
+            chapters[
+              currentIndex + 1
+            ];
+
+
+          nextBtn.disabled =
+            false;
+
 
           nextBtn.onclick = () => {
+
             window.location.href =
               "./reader.html?id=" +
-              encodeURIComponent(mangaId) +
+
+              encodeURIComponent(
+                mangaId
+              ) +
+
               "&chapter=" +
-              encodeURIComponent(nextChapter.id);
+
+              encodeURIComponent(
+                nextChapter.id
+              );
+
           };
+
         } else {
-          nextBtn.disabled = true;
+
+          nextBtn.disabled =
+            true;
+
         }
 
+
       } catch (error) {
+
         console.error(error);
+
 
         pagesContainer.innerHTML =
           '<div class="error">حدث خطأ أثناء تحميل الفصل 💔</div>';
+
       }
+
     }
+
   </script>
 
 </body>
