@@ -1,155 +1,419 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>المانهوا | Sakura Tales</title>
 
+
   <style>
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
 
     body {
+
       margin: 0;
+
       font-family: Arial, sans-serif;
+
       background: #fff7fb;
+
       color: #633f51;
+
     }
+
 
     header {
-      background: linear-gradient(135deg, #ffd6e8, #efa8c7);
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffd9e9,
+          #efa8c7
+        );
+
       padding: 20px;
+
       text-align: center;
+
     }
+
 
     header a {
+
       color: #8f4668;
+
       text-decoration: none;
+
       font-weight: bold;
+
+      font-size: 18px;
+
     }
+
 
     main {
+
       max-width: 900px;
+
       margin: auto;
-      padding: 25px 15px;
+
+      padding: 25px 15px 50px;
+
     }
+
 
     .info {
+
       background: white;
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 5px 20px rgba(160,80,120,.12);
-      margin-bottom: 22px;
+
+      border-radius: 24px;
+
+      padding: 25px;
+
+      box-shadow:
+        0 7px 25px
+        rgba(160, 80, 120, .12);
+
       text-align: center;
+
+      margin-bottom: 22px;
+
     }
+
 
     .cover {
-      width: 190px;
-      height: 260px;
+
+      width: 200px;
+
+      height: 280px;
+
       object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 15px;
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 8px 20px
+        rgba(120, 60, 90, .15);
+
     }
+
 
     h1 {
+
       color: #9b4770;
+
+      margin: 18px 0 10px;
+
     }
+
 
     .genres {
-      color: #9b4770;
-      margin: 12px 0;
+
+      color: #b15c82;
+
+      font-size: 14px;
+
+      margin: 10px 0;
+
+      line-height: 1.8;
+
     }
+
 
     .description {
-      line-height: 1.8;
+
+      max-width: 650px;
+
+      margin: 15px auto;
+
+      line-height: 1.9;
+
+      color: #755667;
+
     }
+
+
+    .status {
+
+      display: inline-block;
+
+      background: #ffe5ef;
+
+      color: #9b4770;
+
+      padding: 7px 13px;
+
+      border-radius: 12px;
+
+      font-size: 13px;
+
+    }
+
 
     .chapters {
+
       background: white;
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow: 0 5px 20px rgba(160,80,120,.12);
+
+      border-radius: 24px;
+
+      padding: 22px;
+
+      box-shadow:
+        0 7px 25px
+        rgba(160, 80, 120, .12);
+
     }
+
+
+    .chapters h2 {
+
+      color: #a64f78;
+
+      margin-top: 0;
+
+      text-align: center;
+
+    }
+
 
     .chapter {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       gap: 10px;
-      padding: 14px;
+
+      padding: 15px;
+
       margin: 10px 0;
-      background: #fff7fb;
-      border: 1px solid #f1d5e2;
-      border-radius: 14px;
+
+      background: #fff8fb;
+
+      border: 1px solid #f2d4e1;
+
+      border-radius: 15px;
+
     }
 
-    .chapter a {
-      color: #9b4770;
-      text-decoration: none;
+
+    .chapter-name {
+
+      color: #704b5c;
+
       font-weight: bold;
+
     }
+
+
+    .read {
+
+      background: #d96f9d;
+
+      color: white;
+
+      text-decoration: none;
+
+      padding: 10px 16px;
+
+      border-radius: 11px;
+
+      font-size: 14px;
+
+      white-space: nowrap;
+
+    }
+
+
+    .read:hover {
+
+      background: #c85d8d;
+
+    }
+
 
     .empty {
+
       text-align: center;
-      padding: 25px;
+
+      padding: 35px 10px;
+
+      color: #8b6878;
+
     }
+
+
+    .back {
+
+      display: inline-block;
+
+      margin-top: 20px;
+
+      color: #9b4770;
+
+      text-decoration: none;
+
+    }
+
+
+    @media (max-width: 600px) {
+
+      .info {
+
+        padding: 18px;
+
+      }
+
+
+      .cover {
+
+        width: 170px;
+
+        height: 240px;
+
+      }
+
+
+      .chapter {
+
+        padding: 12px;
+
+      }
+
+
+      .chapter-name {
+
+        font-size: 14px;
+
+      }
+
+
+      .read {
+
+        padding: 9px 12px;
+
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-  <a href="index.html">🏠 Sakura Tales</a>
+
+  <a href="index.html">
+    🌸 Sakura Tales
+  </a>
+
 </header>
+
 
 <main>
 
-  <section class="info" id="mangaInfo">
+
+  <section
+    class="info"
+    id="mangaInfo"
+  >
+
     جاري تحميل المانهوا... 🌸
+
   </section>
+
 
   <section class="chapters">
 
-    <h2>📖 الفصول</h2>
+    <h2>
+      📖 فصول المانهوا
+    </h2>
+
 
     <div id="chapterList">
+
       جاري تحميل الفصول...
+
     </div>
 
   </section>
+
+
+  <a
+    class="back"
+    href="index.html"
+  >
+    ← العودة للصفحة الرئيسية
+  </a>
+
 
 </main>
 
 
 <script type="module">
 
+
   import { db } from "./firebase.js";
 
+
   import {
+
     doc,
+
     getDoc,
+
     collection,
+
     getDocs
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  } from
+  "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
   const params =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+      window.location.search
+    );
+
 
   const mangaId =
     params.get("id");
 
 
   const mangaInfo =
-    document.getElementById("mangaInfo");
+    document.getElementById(
+      "mangaInfo"
+    );
+
 
   const chapterList =
-    document.getElementById("chapterList");
+    document.getElementById(
+      "chapterList"
+    );
 
 
   if (!mangaId) {
 
     mangaInfo.innerHTML =
       "لم يتم تحديد المانهوا 🌸";
+
+    chapterList.innerHTML = "";
 
   } else {
 
@@ -162,19 +426,30 @@
 
   async function loadManga() {
 
+
     try {
 
+
       const mangaRef =
-        doc(db, "manga", mangaId);
+        doc(
+          db,
+          "manga",
+          mangaId
+        );
+
 
       const mangaSnap =
-        await getDoc(mangaRef);
+        await getDoc(
+          mangaRef
+        );
 
 
       if (!mangaSnap.exists()) {
 
+
         mangaInfo.innerHTML =
           "المانهوا غير موجودة 🌸";
+
 
         return;
 
@@ -186,47 +461,98 @@
 
 
       const genres =
-        Array.isArray(data.genres)
+
+        Array.isArray(
+          data.genres
+        )
+
           ? data.genres.join(" • ")
+
           : data.genres || "";
 
 
       mangaInfo.innerHTML = `
 
+
         ${
           data.cover
-            ? `<img class="cover" src="${data.cover}" alt="">`
+
+            ? `
+
+              <img
+
+                class="cover"
+
+                src="${data.cover}"
+
+                alt="${data.title || ""}"
+
+              >
+
+            `
+
             : ""
+
         }
 
-        <h1>${data.title || "بدون اسم"}</h1>
+
+        <h1>
+
+          ${data.title || "بدون اسم"}
+
+        </h1>
+
+
+        <div class="status">
+
+          ${data.status || "غير محددة"}
+
+        </div>
+
 
         <div class="genres">
+
           ${genres}
+
         </div>
+
 
         <div class="description">
-          ${data.description || "لا يوجد وصف."}
+
+          ${
+
+            data.description ||
+
+            "لا يوجد وصف للمانهوا."
+
+          }
+
         </div>
 
-        <p>
-          الحالة: ${data.status || "غير محددة"}
-        </p>
 
       `;
 
 
       document.title =
+
         (data.title || "المانهوا") +
+
         " | Sakura Tales";
 
 
-    } catch (error) {
+    }
+
+
+    catch (error) {
+
 
       console.error(error);
 
+
       mangaInfo.innerHTML =
-        "حدث خطأ في تحميل المانهوا 🌸";
+
+        "حدث خطأ أثناء تحميل المانهوا 🌸";
+
 
     }
 
@@ -235,23 +561,42 @@
 
   async function loadChapters() {
 
+
     try {
 
+
       const snapshot =
+
         await getDocs(
+
           collection(
+
             db,
+
             "manga",
+
             mangaId,
+
             "chapters"
+
           )
+
         );
 
 
       if (snapshot.empty) {
 
-        chapterList.innerHTML =
-          '<div class="empty">لا توجد فصول حتى الآن 📖</div>';
+
+        chapterList.innerHTML = `
+
+          <div class="empty">
+
+            لا توجد فصول حتى الآن 📖🌸
+
+          </div>
+
+        `;
+
 
         return;
 
@@ -261,69 +606,134 @@
       const chapters = [];
 
 
-      snapshot.forEach((item) => {
+      snapshot.forEach(
 
-        chapters.push({
-          id: item.id,
-          ...item.data()
-        });
+        (item) => {
 
-      });
+
+          chapters.push({
+
+            id: item.id,
+
+            ...item.data()
+
+          });
+
+
+        }
+
+      );
 
 
       chapters.sort(
+
         (a, b) =>
+
           Number(a.number) -
+
           Number(b.number)
+
       );
 
 
       chapterList.innerHTML = "";
 
 
-      chapters.forEach((chapter) => {
+      chapters.forEach(
 
-        const div =
-          document.createElement("div");
-
-        div.className = "chapter";
+        (chapter) => {
 
 
-        div.innerHTML = `
+          const div =
 
-          <span>
-            📖 الفصل ${chapter.number || ""}
-            ${
-              chapter.title
-                ? " — " + chapter.title
-                : ""
-            }
-          </span>
-
-          <a href="reader.html?id=${encodeURIComponent(mangaId)}&chapter=${encodeURIComponent(chapter.id)}">
-            قراءة
-          </a>
-
-        `;
+            document.createElement(
+              "div"
+            );
 
 
-        chapterList.appendChild(div);
+          div.className =
+            "chapter";
 
-      });
+
+          div.innerHTML = `
 
 
-    } catch (error) {
+            <div class="chapter-name">
+
+              📖 الفصل
+              ${chapter.number || ""}
+
+              ${
+                chapter.title
+
+                  ? " — " +
+                    chapter.title
+
+                  : ""
+
+              }
+
+            </div>
+
+
+            <a
+
+              class="read"
+
+              href="reader.html?id=${encodeURIComponent(
+                mangaId
+              )}&chapter=${encodeURIComponent(
+                chapter.id
+              )}"
+
+            >
+
+              قراءة 💗
+
+            </a>
+
+
+          `;
+
+
+          chapterList.appendChild(
+            div
+          );
+
+
+        }
+
+      );
+
+
+    }
+
+
+    catch (error) {
+
 
       console.error(error);
 
-      chapterList.innerHTML =
-        "حدث خطأ في تحميل الفصول 🌸";
+
+      chapterList.innerHTML = `
+
+        <div class="empty">
+
+          حدث خطأ أثناء تحميل الفصول 🌸
+
+        </div>
+
+      `;
+
 
     }
 
   }
 
+
 </script>
 
+
 </body>
+
 </html>
