@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-  >
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 
   <title>قارئ — Sakura Tales</title>
 
@@ -15,8 +13,7 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background: #fff7fb;
@@ -26,9 +23,9 @@
 
     body {
       padding-bottom: 80px;
+      overflow-x: hidden;
     }
 
-    /* الشريط العلوي */
     .topbar {
       position: sticky;
       top: 0;
@@ -56,7 +53,6 @@
       font-size: 14px;
     }
 
-    /* صفحات المانهوا */
     #pages {
       width: 100%;
       margin: 0 auto;
@@ -67,10 +63,7 @@
     .page {
       display: block;
 
-      /*
-        لا يوجد ضغط أو فلتر أو تحويل للصورة.
-        نعرض الملف الأصلي القادم من ImgBB.
-      */
+      /* الصورة الأصلية بدون فلتر أو ضغط من الموقع */
       width: auto;
       max-width: 100%;
       height: auto;
@@ -83,13 +76,13 @@
 
       image-rendering: auto;
 
-      /*
-        يسمح بالتكبير باللمس على الهاتف.
-      */
-      touch-action: pinch-zoom;
+      /* يسمح بالسحب العمودي بإصبع واحد والتكبير بإصبعين */
+      touch-action: pan-y pinch-zoom;
+
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    /* شريط التنقل السفلي */
     .bottom-nav {
       position: fixed;
       left: 0;
@@ -156,7 +149,6 @@
 
   <header class="topbar">
     <a href="./index.html">🌸 Sakura Tales</a>
-
     <div id="mangaTitle">جاري التحميل...</div>
     <div id="chapterTitle"></div>
   </header>
@@ -203,7 +195,6 @@
 
     async function loadReader() {
       try {
-        /* جلب بيانات المانهوا */
         const mangaRef = doc(db, "manga", mangaId);
         const mangaSnap = await getDoc(mangaRef);
 
@@ -218,7 +209,6 @@
         chaptersBtn.href =
           "./manga.html?id=" + encodeURIComponent(mangaId);
 
-        /* جلب الفصل الحالي */
         const chapterRef = doc(
           db,
           "manga",
@@ -245,7 +235,6 @@
             ? " — " + currentChapter.title
             : "");
 
-        /* عرض الصفحات */
         const pages = Array.isArray(currentChapter.pages)
           ? currentChapter.pages
           : [];
@@ -262,20 +251,9 @@
             const img = document.createElement("img");
 
             img.className = "page";
-
-            /*
-              نستخدم الرابط المباشر للصورة كما هو.
-              لا نغير الرابط ولا نضيف أي ضغط.
-            */
             img.src = url;
+            img.alt = "صفحة " + (index + 1);
 
-            img.alt =
-              "صفحة " + (index + 1);
-
-            /*
-              أول 3 صور يتم تحميلها مباشرة،
-              والباقي عند الحاجة لتقليل استهلاك الإنترنت.
-            */
             if (index >= 3) {
               img.loading = "lazy";
             } else {
@@ -284,9 +262,6 @@
 
             img.decoding = "async";
 
-            /*
-              لا توجد أي معالجة للصورة بواسطة الموقع.
-            */
             img.style.filter = "none";
             img.style.transform = "none";
 
@@ -294,7 +269,6 @@
           });
         }
 
-        /* جلب جميع الفصول */
         const chaptersRef = collection(
           db,
           "manga",
@@ -319,10 +293,8 @@
           chapter => chapter.id === chapterId
         );
 
-        /* الفصل السابق */
         if (currentIndex > 0) {
-          const previousChapter =
-            chapters[currentIndex - 1];
+          const previousChapter = chapters[currentIndex - 1];
 
           prevBtn.disabled = false;
 
@@ -337,13 +309,11 @@
           prevBtn.disabled = true;
         }
 
-        /* الفصل التالي */
         if (
           currentIndex !== -1 &&
           currentIndex < chapters.length - 1
         ) {
-          const nextChapter =
-            chapters[currentIndex + 1];
+          const nextChapter = chapters[currentIndex + 1];
 
           nextBtn.disabled = false;
 
