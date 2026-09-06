@@ -1,1264 +1,911 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>لوحة تحكم Sakura Tales 🌸</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff5fa;
-      color: #5b4050;
-    }
-
-    header {
-      background: linear-gradient(135deg, #ffb6d9, #ffd6e9);
-      padding: 28px 20px;
-      text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
-    }
-
-    header h1 {
-      margin: 0;
-      color: #8f3f68;
-      font-size: 28px;
-    }
-
-    header p {
-      margin: 8px 0 15px;
-      color: #795468;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .logout {
-      background: white;
-      color: #d85c91;
-      padding: 10px 22px;
-      border-radius: 20px;
-      font-weight: bold;
-    }
-
-    .user-box {
-      margin: 12px auto 0;
-      max-width: 500px;
-      padding: 9px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.55);
-      color: #795468;
-      font-size: 13px;
-      word-break: break-word;
-    }
-
-    .container {
-      width: 95%;
-      max-width: 1100px;
-      margin: 25px auto;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .stat {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,.06);
-    }
-
-    .stat span {
-      display: block;
-      font-size: 30px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 24px;
-      color: #d85c91;
-    }
-
-    .stat small {
-      color: #8c7180;
-    }
-
-    .box {
-      background: white;
-      border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 25px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.06);
-    }
-
-    .box h2 {
-      margin-top: 0;
-      color: #a34473;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 7px;
-      font-weight: bold;
-      color: #704b60;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #efc5d9;
-      border-radius: 12px;
-      outline: none;
-      font-family: inherit;
-      background: #fffafd;
-      color: #5b4050;
-      font-size: 15px;
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: #e98ab4;
-      box-shadow: 0 0 0 3px rgba(233,138,180,.12);
-    }
-
-    .main-btn {
-      margin-top: 20px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      background: linear-gradient(135deg,#e989b5,#d95d91);
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .message {
-      display: none;
-      margin-top: 12px;
-      padding: 11px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .message.success {
-      display: block;
-      background: #e8f8ee;
-      color: #31804c;
-    }
-
-    .message.error {
-      display: block;
-      background: #ffe9ee;
-      color: #b33e59;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 25px;
-      color: #a25b7c;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 30px;
-      color: #9a7c8b;
-      background: #fffafd;
-      border-radius: 15px;
-    }
-
-    .search-box {
-      margin-bottom: 20px;
-    }
-
-    #mangaList {
-      display: grid;
-      gap: 20px;
-    }
-
-    .manga-card {
-      border: 1px solid #f1d5e2;
-      border-radius: 18px;
-      padding: 18px;
-      background: #fffafd;
-    }
-
-    .manga-top {
-      display: flex;
-      gap: 18px;
-      align-items: flex-start;
-    }
-
-    .cover,
-    .no-cover {
-      width: 120px;
-      height: 165px;
-      border-radius: 12px;
-      object-fit: cover;
-      background: #f9e4ee;
-      flex-shrink: 0;
-    }
-
-    .no-cover {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #b77b98;
-      padding: 10px;
-    }
-
-    .manga-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .manga-info h3 {
-      margin-top: 0;
-      margin-bottom: 8px;
-      color: #963f6b;
-      font-size: 21px;
-    }
-
-    .description {
-      color: #765c69;
-      line-height: 1.7;
-      margin: 8px 0;
-      white-space: pre-wrap;
-    }
-
-    .genres {
-      color: #b25882;
-      margin: 8px 0;
-      font-size: 14px;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 5px 12px;
-      border-radius: 20px;
-      background: #ffe0ed;
-      color: #b44776;
-      font-size: 13px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .edit-btn,
-    .delete-btn,
-    .chapter-delete {
-      padding: 9px 15px;
-      border-radius: 12px;
-      font-weight: bold;
-    }
-
-    .edit-btn {
-      background: #ffe1ee;
-      color: #a84370;
-    }
-
-    .delete-btn,
-    .chapter-delete {
-      background: #ffe5e8;
-      color: #c13e55;
-    }
-
-    .chapters {
-      margin-top: 18px;
-      padding-top: 15px;
-      border-top: 1px solid #f0dce5;
-    }
-
-    .chapters h4 {
-      margin: 0 0 12px;
-      color: #8f4969;
-    }
-
-    .chapter-item {
-      background: white;
-      border: 1px solid #f2dce6;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .chapter-name {
-      flex: 1;
-      line-height: 1.6;
-    }
-
-    @media(max-width:600px) {
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .box {
-        padding: 18px;
-      }
-
-      .manga-top {
-        flex-direction: column;
-      }
-
-      .cover,
-      .no-cover {
-        width: 140px;
-        height: 190px;
-        margin: auto;
-      }
-
-      .manga-info {
-        width: 100%;
-      }
-
-      .chapter-item {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .chapter-delete {
-        width: 100%;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-
-  <h1>🌸 لوحة تحكم Sakura Tales</h1>
-
-  <p>إدارة المانهوا والفصول الخاصة بموقعك</p>
-
-  <button class="logout" id="logoutBtn">
-    تسجيل الخروج
-  </button>
-
-  <div class="user-box" id="userBox">
-    جاري التحقق من الحساب...
-  </div>
-
-</header>
-
-
-<div class="container">
-
-  <div class="stats">
-
-    <div class="stat">
-      <span>📚</span>
-      <strong id="mangaCount">0</strong>
-      <small>عدد المانهوا</small>
-    </div>
-
-    <div class="stat">
-      <span>📖</span>
-      <strong id="chapterCount">0</strong>
-      <small>عدد الفصول</small>
-    </div>
-
-  </div>
-
-
-  <!-- إضافة مانهوا -->
-
-  <div class="box">
-
-    <h2>🌸 إضافة مانهوا جديدة</h2>
-
-    <label for="title">اسم المانهوا</label>
-
-    <input
-      id="title"
-      type="text"
-      placeholder="مثال: Sakura Love"
-    >
-
-    <label for="description">الوصف</label>
-
-    <textarea
-      id="description"
-      placeholder="اكتبي وصف المانهوا..."
-    ></textarea>
-
-    <label for="genres">التصنيفات</label>
-
-    <input
-      id="genres"
-      type="text"
-      placeholder="رومانسي, كوميدي, مدرسي"
-    >
-
-    <label for="status">الحالة</label>
-
-    <select id="status">
-      <option value="مستمرة">مستمرة</option>
-      <option value="مكتملة">مكتملة</option>
-      <option value="متوقفة">متوقفة</option>
-    </select>
-
-    <label for="cover">رابط صورة الغلاف</label>
-
-    <input
-      id="cover"
-      type="url"
-      placeholder="https://example.com/cover.jpg"
-    >
-
-    <button class="main-btn" id="addBtn">
-      ➕ إضافة المانهوا
-    </button>
-
-    <div id="message" class="message"></div>
-
-  </div>
-
-
-  <!-- إضافة فصل -->
-
-  <div class="box">
-
-    <h2>📖 إضافة فصل جديد</h2>
-
-    <label for="mangaSelect">اختاري المانهوا</label>
-
-    <select id="mangaSelect">
-      <option value="">-- اختاري المانهوا --</option>
-    </select>
-
-    <label for="chapterNumber">رقم الفصل</label>
-
-    <input
-      id="chapterNumber"
-      type="number"
-      min="1"
-      step="1"
-      placeholder="مثال: 1"
-    >
-
-    <label for="chapterTitle">عنوان الفصل</label>
-
-    <input
-      id="chapterTitle"
-      type="text"
-      placeholder="مثال: بداية الحكاية"
-    >
-
-    <label for="pages">روابط صفحات الفصل</label>
-
-    <textarea
-      id="pages"
-      placeholder="ضعي كل رابط صورة في سطر منفصل
-https://example.com/page1.jpg
-https://example.com/page2.jpg"
-    ></textarea>
-
-    <button class="main-btn" id="addChapterBtn">
-      📖 إضافة الفصل
-    </button>
-
-    <div id="chapterMessage" class="message"></div>
-
-  </div>
-
-
-  <!-- قائمة المانهوا -->
-
-  <div class="box">
-
-    <h2>📚 المانهوا الموجودة</h2>
-
-    <div class="search-box">
-
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="🔎 ابحثي عن مانهوا..."
-      >
-
-    </div>
-
-    <div id="mangaList">
-
-      <div class="loading">
-        جاري تحميل المانهوا... 🌸
-      </div>
-
-    </div>
-
-  </div>
-
+<!DOCTYPE html>  <html lang="ar" dir="rtl">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>لوحة التحكم | Sakura Tales</title>    <style>  
+    * {  
+      box-sizing: border-box;  
+    }  
+  
+    body {  
+      margin: 0;  
+      font-family: Arial, sans-serif;  
+      background: #fff7fb;  
+      color: #633f51;  
+    }  
+  
+    header {  
+      background: linear-gradient(135deg, #f7b6d2, #e99abd);  
+      padding: 22px;  
+      text-align: center;  
+    }  
+  
+    header h1 {  
+      margin: 0;  
+      color: white;  
+    }  
+  
+    header p {  
+      color: white;  
+      margin: 8px 0;  
+    }  
+  
+    .container {  
+      max-width: 900px;  
+      margin: 25px auto;  
+      padding: 15px;  
+    }  
+  
+    .box {  
+      background: white;  
+      padding: 20px;  
+      border-radius: 18px;  
+      margin-bottom: 20px;  
+      box-shadow: 0 5px 20px rgba(180,100,140,.12);  
+    }  
+  
+    h2 {  
+      color: #a64f78;  
+      margin-top: 0;  
+    }  
+  
+    input,  
+    textarea,  
+    select {  
+      width: 100%;  
+      padding: 13px;  
+      margin: 7px 0;  
+      border: 1px solid #efc4d7;  
+      border-radius: 12px;  
+      font-size: 15px;  
+      outline: none;  
+    }  
+  
+    textarea {  
+      min-height: 120px;  
+      resize: vertical;  
+    }  
+  
+    button {  
+      border: 0;  
+      padding: 12px 18px;  
+      border-radius: 12px;  
+      background: #d96f9d;  
+      color: white;  
+      font-size: 15px;  
+      cursor: pointer;  
+      margin: 5px;  
+    }  
+  
+    button:hover {  
+      background: #c85d8d;  
+    }  
+  
+    .delete {  
+      background: #d9536f;  
+    }  
+  
+    .edit {  
+      background: #8e79c9;  
+    }  
+  
+    .logout {  
+      background: white;  
+      color: #a64f78;  
+    }  
+  
+    .message {  
+      padding: 10px;  
+      margin-top: 10px;  
+      border-radius: 10px;  
+      background: #fff0f6;  
+    }  
+  
+    .manga {  
+      border: 1px solid #f0d4df;  
+      border-radius: 15px;  
+      padding: 15px;  
+      margin-top: 15px;  
+    }  
+  
+    .manga img {  
+      width: 110px;  
+      height: 150px;  
+      object-fit: cover;  
+      border-radius: 12px;  
+      display: block;  
+      margin-bottom: 10px;  
+    }  
+  
+    .chapter {  
+      background: #fff7fb;  
+      padding: 12px;  
+      border-radius: 12px;  
+      margin-top: 10px;  
+      border: 1px solid #f0d4df;  
+    }  
+  
+    .small {  
+      font-size: 13px;  
+      color: #8b6878;  
+    }  
+  </style>  </head>  <body>  <header>  
+  <h1>🌸 لوحة تحكم Sakura Tales</h1>  
+  <p>إدارة المانهوا والفصول</p>  
+  <button class="logout" id="logoutBtn">تسجيل الخروج</button>  
+</header>  <div class="container">    <!-- إضافة مانهوا -->    <div class="box">  
+    <h2>📚 إضافة مانهوا جديدة</h2>  <input id="title" placeholder="اسم المانهوا">  
+
+<textarea id="description" placeholder="وصف المانهوا"></textarea>  
+
+<input id="genres" placeholder="التصنيفات، مثال: Romance, Comedy, School">  
+
+<select id="status">  
+  <option value="مستمرة">مستمرة</option>  
+  <option value="مكتملة">مكتملة</option>  
+  <option value="متوقفة">متوقفة</option>  
+</select>  
+
+<input id="cover" placeholder="رابط صورة الغلاف">  
+
+<button id="addBtn">➕ إضافة المانهوا</button>  
+
+<div class="message" id="message"></div>
+
+  </div>    <!-- إضافة فصل -->    <div class="box">  <h2>📖 إضافة فصل جديد</h2>  
+
+<select id="mangaSelect">  
+  <option value="">اختاري المانهوا</option>  
+</select>  
+
+<input id="chapterNumber" type="number" placeholder="رقم الفصل، مثال: 1">  
+
+<input id="chapterTitle" placeholder="اسم الفصل، مثال: البداية">  
+
+<textarea  
+  id="pages"  
+  placeholder="ضعي روابط صور صفحات الفصل هنا، كل رابط في سطر منفصل"  
+></textarea>  
+
+<p class="small">  
+  💡 مثال:  
+  <br>  
+  https://i.ibb.co/xxxx/page1.jpg  
+  <br>  
+  https://i.ibb.co/xxxx/page2.jpg  
+</p>  
+
+<button id="addChapterBtn">➕ إضافة الفصل</button>  
+
+<div class="message" id="chapterMessage"></div>
+
+  </div>    <!-- المانهوا -->    <div class="box">  <h2>📚 المانهوا الموجودة</h2>  
+
+<div id="mangaList">  
+  جاري تحميل المانهوا...  
 </div>
 
-
-<script type="module">
-
-import { auth, db } from "./firebase.js";
-
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  updateDoc,
-  doc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-/* ==============================
-   عناصر الصفحة
-============================== */
-
-const title = document.getElementById("title");
-const description = document.getElementById("description");
-const genres = document.getElementById("genres");
-const status = document.getElementById("status");
-const cover = document.getElementById("cover");
-
-const addBtn = document.getElementById("addBtn");
-const message = document.getElementById("message");
-
-const mangaSelect = document.getElementById("mangaSelect");
-
-const chapterNumber =
-  document.getElementById("chapterNumber");
-
-const chapterTitle =
-  document.getElementById("chapterTitle");
-
-const pages =
-  document.getElementById("pages");
-
-const addChapterBtn =
-  document.getElementById("addChapterBtn");
-
-const chapterMessage =
-  document.getElementById("chapterMessage");
-
-const mangaList =
-  document.getElementById("mangaList");
-
-const searchInput =
-  document.getElementById("searchInput");
-
-const mangaCount =
-  document.getElementById("mangaCount");
-
-const chapterCount =
-  document.getElementById("chapterCount");
-
-const logoutBtn =
-  document.getElementById("logoutBtn");
-
-const userBox =
-  document.getElementById("userBox");
-
-
-let allManga = [];
-let currentUser = null;
-
-
-/* ==============================
-   الرسائل
-============================== */
-
-function showMessage(element, text, type) {
-
-  element.textContent = text;
-  element.className = "message " + type;
-
-  setTimeout(() => {
-    element.textContent = "";
-    element.className = "message";
-  }, 4000);
-}
-
-
-/* ==============================
-   تسجيل الدخول
-============================== */
-
-onAuthStateChanged(auth, async (user) => {
-
-  console.log("Firebase user:", user);
-
-  if (!user) {
-
-    currentUser = null;
-
-    userBox.textContent =
-      "❌ لم يتم تسجيل الدخول";
-
-    setTimeout(() => {
-      window.location.href = "login.html";
-    }, 1000);
-
-    return;
-  }
-
-  currentUser = user;
-
-  userBox.textContent =
-    "👤 الحساب: " +
-    (user.email || "تم تسجيل الدخول");
-
-  await loadManga();
-
-});
-
-
-/* ==============================
-   تسجيل الخروج
-============================== */
-
-logoutBtn.addEventListener("click", async () => {
-
-  try {
-
-    await signOut(auth);
-
-    window.location.href = "login.html";
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert("حدث خطأ أثناء تسجيل الخروج");
-
-  }
-
-});
-
-
-/* ==============================
-   إضافة مانهوا
-============================== */
-
-addBtn.addEventListener("click", async () => {
-
-  if (!currentUser) {
-
-    showMessage(
-      message,
-      "لم يتم التعرف على تسجيل الدخول 🔐",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const mangaTitle =
-    title.value.trim();
-
-  const mangaDescription =
-    description.value.trim();
-
-  const mangaGenres =
-    genres.value
-      .split(",")
-      .map(x => x.trim())
-      .filter(Boolean);
-
-  const mangaStatus =
-    status.value;
-
-  const mangaCover =
-    cover.value.trim();
-
-
-  if (!mangaTitle) {
-
-    showMessage(
-      message,
-      "اكتبي اسم المانهوا أولاً 🌸",
-      "error"
-    );
-
-    title.focus();
-
-    return;
-  }
-
-
-  addBtn.disabled = true;
-
-  addBtn.textContent =
-    "جاري الإضافة... ⏳";
-
-
-  try {
-
-    await addDoc(
-      collection(db, "manga"),
-      {
-
-        title: mangaTitle,
-
-        description: mangaDescription,
-
-        genres: mangaGenres,
-
-        status: mangaStatus,
-
-        cover: mangaCover,
-
-        createdAt:
-          new Date().toISOString(),
-
-        createdBy:
-          currentUser.uid
-
-      }
-    );
-
-
-    showMessage(
-      message,
-      "تمت إضافة المانهوا بنجاح 🌸✨",
-      "success"
-    );
-
-
-    title.value = "";
-    description.value = "";
-    genres.value = "";
-    status.value = "مستمرة";
-    cover.value = "";
-
-
-    await loadManga();
-
-  } catch (error) {
-
-    console.error("ADD MANGA ERROR:", error);
-
-    showMessage(
-      message,
-      "فشلت الإضافة ❌ تأكدي من Firebase.",
-      "error"
-    );
-
-  }
-
-
-  addBtn.disabled = false;
-
-  addBtn.textContent =
-    "➕ إضافة المانهوا";
-
-});
-
-
-/* ==============================
-   إضافة فصل
-============================== */
-
-addChapterBtn.addEventListener("click", async () => {
-
-  if (!currentUser) {
-
-    showMessage(
-      chapterMessage,
-      "لم يتم التعرف على تسجيل الدخول 🔐",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const mangaId =
-    mangaSelect.value;
-
-  const number =
-    Number(chapterNumber.value);
-
-  const titleValue =
-    chapterTitle.value.trim();
-
-  const pageLinks =
-    pages.value
-      .split(/\r?\n/)
-      .map(x => x.trim())
-      .filter(Boolean);
-
-
-  if (!mangaId) {
-
-    showMessage(
-      chapterMessage,
-      "اختاري المانهوا أولاً 🌸",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if (!Number.isInteger(number) || number < 1) {
-
-    showMessage(
-      chapterMessage,
-      "اكتبي رقم فصل صحيح 📖",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if (!titleValue) {
-
-    showMessage(
-      chapterMessage,
-      "اكتبي عنوان الفصل 🌸",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if (pageLinks.length === 0) {
-
-    showMessage(
-      chapterMessage,
-      "أضيفي روابط صفحات الفصل 📷",
-      "error"
-    );
-
-    return;
-  }
-
-
-  addChapterBtn.disabled = true;
-
-  addChapterBtn.textContent =
-    "جاري إضافة الفصل... ⏳";
-
-
-  try {
-
-    await addDoc(
-      collection(
-        db,
-        "manga",
-        mangaId,
-        "chapters"
-      ),
-      {
-
-        number: number,
-
-        title: titleValue,
-
-        pages: pageLinks,
-
-        createdAt:
-          new Date().toISOString(),
-
-        createdBy:
-          currentUser.uid
-
-      }
-    );
-
-
-    showMessage(
-      chapterMessage,
-      "تمت إضافة الفصل بنجاح 📖🌸",
-      "success"
-    );
-
-
-    chapterNumber.value = "";
-    chapterTitle.value = "";
-    pages.value = "";
-
-
-    await loadManga();
-
-  } catch (error) {
-
-    console.error("ADD CHAPTER ERROR:", error);
-
-    showMessage(
-      chapterMessage,
-      "فشلت إضافة الفصل ❌",
-      "error"
-    );
-
-  }
-
-
-  addChapterBtn.disabled = false;
-
-  addChapterBtn.textContent =
-    "📖 إضافة الفصل";
-
-});
-
-
-/* ==============================
-   تحميل المانهوا
-============================== */
-
-async function loadManga() {
-
-  mangaList.innerHTML =
-    '<div class="loading">جاري تحميل المانهوا... 🌸</div>';
-
-
-  try {
-
-    const snapshot =
-      await getDocs(
-        collection(db, "manga")
-      );
-
-
-    allManga = [];
-
-
-    snapshot.forEach(item => {
-
-      allManga.push({
-        id: item.id,
-        ...item.data()
-      });
-
-    });
-
-
-    allManga.sort((a, b) => {
-
-      return String(b.createdAt || "")
-        .localeCompare(
-          String(a.createdAt || "")
-        );
-
-    });
-
-
-    mangaCount.textContent =
-      allManga.length;
-
-
-    updateMangaSelect();
-
-    await renderManga(
-      getFilteredManga()
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "LOAD MANGA ERROR:",
-      error
-    );
-
-    mangaList.innerHTML = `
-      <div class="empty">
-        ❌ لم نستطع تحميل المانهوا.
-        <br><br>
-        الخطأ:
-        ${escapeHtml(error.message)}
-      </div>
-    `;
-
-  }
-
-}
-
-
-/* ==============================
-   قائمة الاختيار
-============================== */
-
-function updateMangaSelect() {
-
-  const oldValue =
-    mangaSelect.value;
-
-
-  mangaSelect.innerHTML =
-    '<option value="">-- اختاري المانهوا --</option>';
-
-
-  allManga.forEach(item => {
-
-    const option =
-      document.createElement("option");
-
-    option.value =
-      item.id;
-
-    option.textContent =
-      item.title || "بدون اسم";
-
-    mangaSelect.appendChild(option);
-
-  });
-
-
-  if (
-    oldValue &&
-    allManga.some(
-      item => item.id === oldValue
-    )
-  ) {
-
-    mangaSelect.value =
-      oldValue;
-
-  }
-
-}
-
-
-/* ==============================
-   البحث
-============================== */
-
-searchInput.addEventListener("input", async () => {
-
-  await renderManga(
-    getFilteredManga()
-  );
-
-});
-
-
-function getFilteredManga() {
-
-  const search =
-    searchInput.value
-      .trim()
-      .toLowerCase();
-
-
-  if (!search) {
-    return allManga;
-  }
-
-
-  return allManga.filter(item => {
-
-    const itemTitle =
-      String(item.title || "")
-        .toLowerCase();
-
-    const itemDescription =
-      String(item.description || "")
-        .toLowerCase();
-
-    return (
-      itemTitle.includes(search) ||
-      itemDescription.includes(search)
-    );
-
-  });
-
-}
-
-
-/* ==============================
-   عرض المانهوا
-============================== */
-
-async function renderManga(list) {
-
-  mangaList.innerHTML = "";
-
-  chapterCount.textContent = "0";
-
-
-  if (list.length === 0) {
-
-    mangaList.innerHTML =
-      '<div class="empty">لا توجد مانهوا 🌸</div>';
-
-    return;
-  }
-
-
-  let totalChapters = 0;
-
-
-  for (const item of list) {
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "manga-card";
-
-
-    const top =
-      document.createElement("div");
-
-    top.className =
-      "manga-top";
-
-
-    /* الغلاف */
-
-    if (item.cover) {
-
-      const image =
-        document.createElement("img");
-
-      image.className =
-        "cover";
-
-      image.src =
-        item.cover;
-
-      image.alt =
-        item.title || "غلاف المانهوا";
-
-      image.onerror = () => {
-
-        image.style.display = "none";
-
-      };
-
-      top.appendChild(image);
-
-    } else {
-
-      const noCover =
-        document.createElement("div");
-
-      noCover.className =
-        "no-cover";
-
-      noCover.textContent =
-        "🌸 لا توجد صورة";
-
-      top.appendChild(noCover);
-
-    }
-
-
-    /* معلومات المانهوا */
-
-    const info =
-      document.createElement("div");
-
-    info.className =
-      "manga-info";
-
-
-    const h3 =
-      document.createElement("h3");
-
-    h3.textContent =
-      item.title || "بدون اسم";
-
-
-    const desc =
-      document.createElement("div");
-
-    desc.className =
-      "description";
-
-    desc.textContent =
-      item.description || "لا يوجد وصف";
-
-
-    const genresEl =
-      document.createElement("div");
-
-    genresEl.className =
-      "genres";
-
-    const genreArray =
-      Array.isArray(item.genres)
-        ? item.genres
-        : [];
-
-    genresEl.textContent =
-      genreArray.length
-        ? "🏷️ " + genreArray.join(" • ")
-        : "🏷️ بدون تصنيفات";
-
-
-    const statusEl =
-      document.createElement("span");
-
-    statusEl.className =
-      "status";
-
-    statusEl.textContent =
-      item.status || "مستمرة";
-
-
-    /* الأزرار */
-
-    const actions =
-      document.createElement("div");
-
-    actions.className =
-      "actions";
-
-
-    const editBtn =
-      document.createElement("button");
-
-    editBtn.className =
-      "edit-btn";
-
-    editBtn.textContent =
-      "✏️ تعديل";
-
-
-    editBtn.addEventListener(
-      "click",
-      () => editMang
+  </div>  </div>  <script type="module">  
+  
+  import { auth, db } from "./firebase.js";  
+  
+  import {  
+    onAuthStateChanged,  
+    signOut  
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
+  
+  import {  
+    collection,  
+    addDoc,  
+    getDocs,  
+    deleteDoc,  
+    updateDoc,  
+    doc  
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
+  
+  
+  const title = document.getElementById("title");  
+  const description = document.getElementById("description");  
+  const genres = document.getElementById("genres");  
+  const status = document.getElementById("status");  
+  const cover = document.getElementById("cover");  
+  
+  const addBtn = document.getElementById("addBtn");  
+  const message = document.getElementById("message");  
+  const mangaList = document.getElementById("mangaList");  
+  const logoutBtn = document.getElementById("logoutBtn");  
+  
+  const mangaSelect = document.getElementById("mangaSelect");  
+  const chapterNumber = document.getElementById("chapterNumber");  
+  const chapterTitle = document.getElementById("chapterTitle");  
+  const pages = document.getElementById("pages");  
+  const addChapterBtn = document.getElementById("addChapterBtn");  
+  const chapterMessage = document.getElementById("chapterMessage");  
+  
+  
+  // التأكد من تسجيل الدخول  
+  
+  onAuthStateChanged(auth, (user) => {  
+  
+    if (!user) {  
+  
+      window.location.href = "login.html";  
+  
+      return;  
+  
+    }  
+  
+    loadManga();  
+  
+  });  
+  
+  
+  // تسجيل الخروج  
+  
+  logoutBtn.addEventListener("click", async () => {  
+  
+    await signOut(auth);  
+  
+    window.location.href = "login.html";  
+  
+  });  
+  
+  
+  // إضافة مانهوا  
+  
+  addBtn.addEventListener("click", async () => {  
+  
+    if (!title.value.trim()) {  
+  
+      message.textContent =  
+        "اكتبي اسم المانهوا أولاً 🌸";  
+  
+      return;  
+  
+    }  
+  
+  
+    message.textContent =  
+      "جاري إضافة المانهوا...";  
+  
+  
+    try {  
+  
+      await addDoc(  
+        collection(db, "manga"),  
+        {  
+  
+          title: title.value.trim(),  
+  
+          description:  
+            description.value.trim(),  
+  
+          genres: genres.value  
+            .split(",")  
+            .map(x => x.trim())  
+            .filter(x => x),  
+  
+          status:  
+            status.value,  
+  
+          cover:  
+            cover.value.trim(),  
+  
+          createdAt:  
+            new Date().toISOString()  
+  
+        }  
+      );  
+  
+  
+      message.textContent =  
+        "تمت إضافة المانهوا بنجاح 💗";  
+  
+  
+      title.value = "";  
+      description.value = "";  
+      genres.value = "";  
+      cover.value = "";  
+  
+  
+      status.value = "مستمرة";  
+  
+  
+      loadManga();  
+  
+  
+    } catch (error) {  
+  
+      console.error(error);  
+  
+      message.textContent =  
+        "حدث خطأ: " +  
+        error.message;  
+  
+    }  
+  
+  });  
+  
+  
+  // إضافة فصل  
+  
+  addChapterBtn.addEventListener(  
+    "click",  
+    async () => {  
+  
+      const mangaId =  
+        mangaSelect.value;  
+  
+  
+      if (!mangaId) {  
+  
+        chapterMessage.textContent =  
+          "اختاري المانهوا أولاً 🌸";  
+  
+        return;  
+  
+      }  
+  
+  
+      if (!chapterNumber.value) {  
+  
+        chapterMessage.textContent =  
+          "اكتبي رقم الفصل 🌸";  
+  
+        return;  
+  
+      }  
+  
+  
+      const pageLinks =  
+        pages.value  
+          .split("\n")  
+          .map(x => x.trim())  
+          .filter(x => x);  
+  
+  
+      if (pageLinks.length === 0) {  
+  
+        chapterMessage.textContent =  
+          "ضعي رابط صفحة واحدة على الأقل 🌸";  
+  
+        return;  
+  
+      }  
+  
+  
+      chapterMessage.textContent =  
+        "جاري إضافة الفصل...";  
+  
+  
+      try {  
+  
+        await addDoc(  
+          collection(  
+            db,  
+            "manga",  
+            mangaId,  
+            "chapters"  
+          ),  
+          {  
+  
+            number:  
+              Number(chapterNumber.value),  
+  
+            title:  
+              chapterTitle.value.trim(),  
+  
+            pages:  
+              pageLinks,  
+  
+            createdAt:  
+              new Date().toISOString()  
+  
+          }  
+        );  
+  
+  
+        chapterMessage.textContent =  
+          "تمت إضافة الفصل بنجاح 💗";  
+  
+  
+        chapterNumber.value = "";  
+  
+        chapterTitle.value = "";  
+  
+        pages.value = "";  
+  
+  
+        loadManga();  
+  
+  
+      } catch (error) {  
+  
+        console.error(error);  
+  
+        chapterMessage.textContent =  
+          "حدث خطأ: " +  
+          error.message;  
+  
+      }  
+  
+    }  
+  );  
+  
+  
+  // تحميل المانهوا  
+  
+  async function loadManga() {  
+  
+    mangaList.innerHTML =  
+      "جاري التحميل...";  
+  
+  
+    mangaSelect.innerHTML =  
+      '<option value="">اختاري المانهوا</option>';  
+  
+  
+    try {  
+  
+      const snapshot =  
+        await getDocs(  
+          collection(db, "manga")  
+        );  
+  
+  
+      if (snapshot.empty) {  
+  
+        mangaList.innerHTML =  
+          "لا توجد مانهوا حتى الآن 🌸";  
+  
+        return;  
+  
+      }  
+  
+  
+      mangaList.innerHTML = "";  
+  
+  
+      snapshot.forEach((item) => {  
+  
+        const data =  
+          item.data();  
+  
+  
+        // إضافة المانهوا للقائمة  
+  
+        const option =  
+          document.createElement("option");  
+  
+        option.value =  
+          item.id;  
+  
+        option.textContent =  
+          data.title ||  
+          "بدون اسم";  
+  
+        mangaSelect.appendChild(  
+          option  
+        );  
+  
+  
+        // بطاقة المانهوا  
+  
+        const div =  
+          document.createElement("div");  
+  
+        div.className =  
+          "manga";  
+  
+  
+        div.innerHTML = `  
+  
+          ${  
+            data.cover  
+              ? `<img src="${data.cover}" alt="غلاف المانهوا">`  
+              : ""  
+          }  
+  
+          <h3>  
+            ${data.title || "بدون اسم"}  
+          </h3>  
+  
+          <p>  
+            ${data.description || ""}  
+          </p>  
+  
+          <p>  
+            <strong>التصنيفات:</strong>  
+            ${  
+              Array.isArray(data.genres)  
+                ? data.genres.join("، ")  
+                : ""  
+            }  
+          </p>  
+  
+          <p>  
+            <strong>الحالة:</strong>  
+            ${data.status || "مستمرة"}  
+          </p>  
+  
+          <button class="edit">  
+            ✏️ تعديل  
+          </button>  
+  
+          <button class="delete">  
+            🗑️ حذف  
+          </button>  
+  
+          <div class="chapterList">  
+            جاري تحميل الفصول...  
+          </div>  
+  
+        `;  
+  
+  
+        // حذف المانهوا  
+  
+        div.querySelector(".delete")  
+          .addEventListener(  
+            "click",  
+            async () => {  
+  
+              const ok =  
+                confirm(  
+                  "هل تريدين حذف هذه المانهوا؟"  
+                );  
+  
+  
+              if (!ok) return;  
+  
+  
+              try {  
+  
+                await deleteDoc(  
+                  doc(  
+                    db,  
+                    "manga",  
+                    item.id  
+                  )  
+                );  
+  
+  
+                message.textContent =  
+                  "تم حذف المانهوا 🗑️";  
+  
+  
+                loadManga();  
+  
+  
+              } catch (error) {  
+  
+                console.error(error);  
+  
+                message.textContent =  
+                  "خطأ في الحذف: " +  
+                  error.message;  
+  
+              }  
+  
+            }  
+          );  
+  
+  
+        // تعديل المانهوا  
+  
+        div.querySelector(".edit")  
+          .addEventListener(  
+            "click",  
+            async () => {  
+  
+              const newTitle =  
+                prompt(  
+                  "اسم المانهوا:",  
+                  data.title || ""  
+                );  
+  
+  
+              if (newTitle === null)  
+                return;  
+  
+  
+              const newDescription =  
+                prompt(  
+                  "الوصف:",  
+                  data.description || ""  
+                );  
+  
+  
+              if (newDescription === null)  
+                return;  
+  
+  
+              /*  
+                اختيار الحالة الجديدة  
+              */  
+  
+              const currentStatus =  
+                data.status || "مستمرة";  
+  
+  
+              const newStatus =  
+                prompt(  
+                  "الحالة الحالية: " +  
+                  currentStatus +  
+                  "\n\nاكتبي واحدة من:\n" +  
+                  "مستمرة\n" +  
+                  "متوقفة\n" +  
+                  "مكتملة",  
+                  currentStatus  
+                );  
+  
+  
+              if (newStatus === null)  
+                return;  
+  
+  
+              const allowedStatuses = [  
+                "مستمرة",  
+                "متوقفة",  
+                "مكتملة"  
+              ];  
+  
+  
+              if (  
+                !allowedStatuses.includes(  
+                  newStatus.trim()  
+                )  
+              ) {  
+  
+                message.textContent =  
+                  "الحالة غير صحيحة. اختاري: مستمرة أو متوقفة أو مكتملة 🌸";  
+  
+                return;  
+  
+              }  
+  
+  
+              try {  
+  
+                await updateDoc(  
+                  doc(  
+                    db,  
+                    "manga",  
+                    item.id  
+                  ),  
+                  {  
+  
+                    title:  
+                      newTitle.trim(),  
+  
+                    description:  
+                      newDescription.trim(),  
+  
+                    status:  
+                      newStatus.trim()  
+  
+                  }  
+                );  
+  
+  
+                message.textContent =  
+                  "تم تعديل المانهوا والحالة بنجاح ✨";  
+  
+  
+                loadManga();  
+  
+  
+              } catch (error) {  
+  
+                console.error(error);  
+  
+                message.textContent =  
+                  "خطأ في التعديل: " +  
+                  error.message;  
+  
+              }  
+  
+            }  
+          );  
+  
+  
+        mangaList.appendChild(  
+          div  
+        );  
+  
+  
+        // تحميل الفصول  
+  
+        loadChapters(  
+          item.id,  
+          div.querySelector(  
+            ".chapterList"  
+          )  
+        );  
+  
+      });  
+  
+  
+    } catch (error) {  
+  
+      console.error(error);  
+  
+      mangaList.innerHTML =  
+        "حدث خطأ أثناء تحميل المانهوا: " +  
+        error.message;  
+  
+    }  
+  
+  }  
+  
+  
+  // تحميل الفصول  
+  
+  async function loadChapters(  
+    mangaId,  
+    container  
+  ) {  
+  
+    try {  
+  
+      const snapshot =  
+        await getDocs(  
+          collection(  
+            db,  
+            "manga",  
+            mangaId,  
+            "chapters"  
+          )  
+        );  
+  
+  
+      if (snapshot.empty) {  
+  
+        container.innerHTML =  
+          "<p>لا توجد فصول حتى الآن 📖</p>";  
+  
+        return;  
+  
+      }  
+  
+  
+      container.innerHTML =  
+        "<h4>📖 الفصول:</h4>";  
+  
+  
+      const chapters = [];  
+  
+  
+      snapshot.forEach((item) => {  
+  
+        chapters.push({  
+  
+          id:  
+            item.id,  
+  
+          ...item.data()  
+  
+        });  
+  
+      });  
+  
+  
+      chapters.sort(  
+        (a, b) =>  
+          Number(a.number) -  
+          Number(b.number)  
+      );  
+  
+  
+      chapters.forEach(  
+        (chapter) => {  
+  
+          const div =  
+            document.createElement(  
+              "div"  
+            );  
+  
+          div.className =  
+            "chapter";  
+  
+  
+          div.innerHTML = `  
+  
+            <strong>  
+              الفصل ${chapter.number || ""}  
+            </strong>  
+  
+            ${  
+              chapter.title  
+                ? ` - ${chapter.title}`  
+                : ""  
+            }  
+  
+            <br>  
+  
+            <span class="small">  
+              ${chapter.pages?.length || 0}  
+              صفحة  
+            </span>  
+  
+            <br>  
+  
+            <button  
+              class="deleteChapter delete">  
+              🗑️ حذف الفصل  
+            </button>  
+  
+          `;  
+  
+  
+          div.querySelector(  
+            ".deleteChapter"  
+          ).addEventListener(  
+            "click",  
+            async () => {  
+  
+              const ok =  
+                confirm(  
+                  "هل تريدين حذف هذا الفصل؟"  
+                );  
+  
+  
+              if (!ok) return;  
+  
+  
+              try {  
+  
+                await deleteDoc(  
+                  doc(  
+                    db,  
+                    "manga",  
+                    mangaId,  
+                    "chapters",  
+                    chapter.id  
+                  )  
+                );  
+  
+  
+                message.textContent =  
+                  "تم حذف الفصل 🗑️";  
+  
+  
+                loadManga();  
+  
+  
+              } catch (error) {  
+  
+                console.error(error);  
+  
+                message.textContent =  
+                  "خطأ في حذف الفصل: " +  
+                  error.message;  
+  
+              }  
+  
+            }  
+          );  
+  
+  
+          container.appendChild(  
+            div  
+          );  
+  
+        }  
+      );  
+  
+  
+    } catch (error) {  
+  
+      console.error(error);  
+  
+      container.innerHTML =  
+        "خطأ في تحميل الفصول: " +  
+        error.message;  
+  
+    }  
+  
+  }  
+  
+</script>  </body>  
+</html>
