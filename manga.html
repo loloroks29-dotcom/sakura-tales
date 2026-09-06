@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sakura Tales</title>
-
-  <style>
+  <title>Sakura Tales</title>  <style>
     * {
       box-sizing: border-box;
     }
@@ -76,6 +71,7 @@
       border-radius: 12px;
     }
 
+    /* قسم الفصول */
     .chapters {
       background: white;
       border-radius: 24px;
@@ -86,31 +82,79 @@
     .chapters h2 {
       text-align: center;
       color: #a64f78;
+      margin-top: 5px;
+      margin-bottom: 20px;
     }
 
+    /* بطاقة الفصل */
     .chapter {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 15px;
-      margin: 10px 0;
-      background: #fff8fb;
+      gap: 14px;
+      padding: 14px;
+      margin: 12px 0;
+      background: linear-gradient(135deg, #fff8fb, #fff1f7);
       border: 1px solid #f2d4e1;
-      border-radius: 15px;
-      gap: 10px;
+      border-radius: 18px;
+      transition: .2s;
+    }
+
+    .chapter:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 16px rgba(160, 80, 120, .10);
+      border-color: #eab5cc;
+    }
+
+    /* رقم الفصل */
+    .chapter-number {
+      min-width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f4a9c8, #d96f9d);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 15px;
+      box-shadow: 0 4px 10px rgba(217, 111, 157, .20);
+    }
+
+    /* اسم الفصل */
+    .chapter-info {
+      flex: 1;
+      min-width: 0;
     }
 
     .chapter-name {
       font-weight: bold;
+      color: #70465a;
+      line-height: 1.6;
+      word-break: break-word;
     }
 
+    .chapter-label {
+      color: #b47b91;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* زر القراءة */
     .read {
-      background: #d96f9d;
+      background: linear-gradient(135deg, #df79a5, #c95f8d);
       color: white;
       text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 11px;
+      padding: 11px 17px;
+      border-radius: 13px;
       white-space: nowrap;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(201, 95, 141, .15);
+      transition: .2s;
+    }
+
+    .read:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 14px rgba(201, 95, 141, .22);
     }
 
     .empty {
@@ -123,36 +167,68 @@
       margin-top: 20px;
       color: #9b4770;
       text-decoration: none;
+      font-weight: bold;
     }
-  </style>
-</head>
 
-<body>
+    @media (max-width: 600px) {
 
-<header>
+      .chapters {
+        padding: 15px;
+      }
+
+      .chapter {
+        padding: 11px;
+        gap: 10px;
+      }
+
+      .chapter-number {
+        min-width: 42px;
+        height: 42px;
+        font-size: 13px;
+      }
+
+      .chapter-name {
+        font-size: 13px;
+      }
+
+      .chapter-label {
+        font-size: 11px;
+      }
+
+      .read {
+        padding: 9px 11px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 380px) {
+
+      .chapter {
+        flex-wrap: wrap;
+      }
+
+      .chapter-info {
+        flex: 1;
+      }
+
+      .read {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style></head><body><header>
   <a href="index.html">🌸 Sakura Tales</a>
-</header>
-
-<main>
-
-  <section class="info" id="mangaInfo">
+</header><main>  <section class="info" id="mangaInfo">
     جاري تحميل المانهوا... 🌸
-  </section>
+  </section>  <section class="chapters"><h2>📖 فصول المانهوا</h2>
 
-  <section class="chapters">
-    <h2>📖 فصول المانهوا</h2>
-    <div id="chapterList">
-      جاري تحميل الفصول...
-    </div>
-  </section>
+<div id="chapterList">
+  جاري تحميل الفصول...
+</div>
 
-  <a class="back" href="index.html">
+  </section>  <a class="back" href="index.html">
     ← العودة للرئيسية
-  </a>
-
-</main>
-
-<script type="module">
+  </a></main><script type="module">
 
   import { db } from "./firebase.js";
 
@@ -308,24 +384,25 @@
       div.className = "chapter";
 
 
-      const link =
-        document.createElement("a");
+      /* رقم الفصل */
 
-      link.className = "read";
+      const number =
+        document.createElement("div");
 
-      link.textContent = "قراءة 💗";
+      number.className =
+        "chapter-number";
+
+      number.textContent =
+        chapter.number || "";
 
 
-      /*
-        هنا نرسل رقم المانهوا
-        ورقم الفصل إلى reader.html
-      */
+      /* معلومات الفصل */
 
-      link.href =
-        "./reader.html?id=" +
-        encodeURIComponent(mangaId) +
-        "&chapter=" +
-        encodeURIComponent(chapter.id);
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "chapter-info";
 
 
       const name =
@@ -335,16 +412,46 @@
         "chapter-name";
 
       name.textContent =
+        chapter.title
+          ? chapter.title
+          : "الفصل " + (chapter.number || "");
+
+
+      const label =
+        document.createElement("div");
+
+      label.className =
+        "chapter-label";
+
+      label.textContent =
         "📖 الفصل " +
-        (chapter.number || "") +
-        (
-          chapter.title
-            ? " — " + chapter.title
-            : ""
-        );
+        (chapter.number || "");
 
 
-      div.appendChild(name);
+      info.appendChild(name);
+      info.appendChild(label);
+
+
+      /* زر القراءة */
+
+      const link =
+        document.createElement("a");
+
+      link.className = "read";
+
+      link.textContent =
+        "قراءة 💗";
+
+
+      link.href =
+        "./reader.html?id=" +
+        encodeURIComponent(mangaId) +
+        "&chapter=" +
+        encodeURIComponent(chapter.id);
+
+
+      div.appendChild(number);
+      div.appendChild(info);
       div.appendChild(link);
 
       chapterList.appendChild(div);
@@ -353,7 +460,5 @@
 
   }
 
-</script>
-
-</body>
+</script></body>
 </html>
