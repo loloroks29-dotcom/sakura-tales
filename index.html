@@ -132,55 +132,6 @@
       margin-top: 0;
     }
 
-    /* آخر الفصول */
-
-    .latest-section {
-      margin-bottom: 35px;
-    }
-
-    .latest-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 6px 22px rgba(160, 80, 120, .12);
-      cursor: pointer;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .latest-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(160, 80, 120, .18);
-    }
-
-    .latest-cover {
-      position: relative;
-      background: #f8dce9;
-    }
-
-    .latest-cover img {
-      width: 100%;
-      height: 230px;
-      display: block;
-      object-fit: cover;
-    }
-
-    .latest-content {
-      padding: 14px;
-      text-align: center;
-    }
-
-    .latest-content h3 {
-      margin: 0 0 7px;
-      color: #9b4770;
-      font-size: 17px;
-      line-height: 1.4;
-    }
-
-    .latest-chapter {
-      color: #b15c82;
-      font-size: 13px;
-    }
-
     /* الفلاتر */
 
     .filters {
@@ -421,14 +372,6 @@
         padding: 5px 8px;
         font-size: 10px;
       }
-
-      .latest-cover img {
-        height: 220px;
-      }
-
-      .latest-content h3 {
-        font-size: 15px;
-      }
     }
   </style>
 </head>
@@ -436,13 +379,17 @@
 <body>
 
 <header>
+
   <div class="logo">
     <h1>🌸 Sakura Tales</h1>
     <p>عالم من المانهوا والقصص الجميلة 💗</p>
   </div>
+
 </header>
 
+
 <div class="search-area">
+
   <div class="search-box">
 
     <input
@@ -456,32 +403,11 @@
     </button>
 
   </div>
+
 </div>
 
+
 <main>
-
-  <!-- آخر الفصول -->
-
-  <section class="latest-section">
-
-    <div class="section-title">
-      <h2>🆕 آخر الفصول</h2>
-
-      <p>
-        أحدث الفصول المضافة حديثًا 🌸
-      </p>
-    </div>
-
-    <div id="latestChapters" class="grid">
-
-      <div class="empty">
-        جاري تحميل آخر الفصول... 🌸
-      </div>
-
-    </div>
-
-  </section>
-
 
   <div class="section-title">
 
@@ -570,227 +496,13 @@
   const filterButtons =
     document.querySelectorAll(".filter-btn");
 
-  const latestChapters =
-    document.getElementById("latestChapters");
-
 
   let allManga = [];
 
   let currentFilter = "all";
 
 
-  /* =========================
-     آخر الفصول
-  ========================= */
-
-  async function loadLatestChapters() {
-
-    try {
-
-      const mangaSnapshot =
-        await getDocs(
-          collection(db, "manga")
-        );
-
-      const latest = [];
-
-
-      for (const mangaDoc of mangaSnapshot.docs) {
-
-        const mangaData = mangaDoc.data();
-
-        const chaptersSnapshot =
-          await getDocs(
-            collection(
-              db,
-              "manga",
-              mangaDoc.id,
-              "الفصول"
-            )
-          );
-
-
-        chaptersSnapshot.forEach((chapterDoc) => {
-
-          const chapterData =
-            chapterDoc.data();
-
-
-          latest.push({
-
-            mangaId: mangaDoc.id,
-
-            mangaTitle:
-              mangaData.title || "بدون اسم",
-
-            cover:
-              mangaData.cover || "",
-
-            number:
-              chapterData.رقم ?? "",
-
-            title:
-              chapterData.عنوان || "",
-
-            createdAt:
-              chapterData.تم إنشاؤه || 0
-
-          });
-
-        });
-
-      }
-
-
-      latest.sort((a, b) => {
-
-        const dateA =
-          a.createdAt?.toDate
-            ? a.createdAt.toDate()
-            : new Date(a.createdAt || 0);
-
-        const dateB =
-          b.createdAt?.toDate
-            ? b.createdAt.toDate()
-            : new Date(b.createdAt || 0);
-
-        return dateB - dateA;
-
-      });
-
-
-      const newest =
-        latest.slice(0, 8);
-
-
-      latestChapters.innerHTML = "";
-
-
-      if (newest.length === 0) {
-
-        latestChapters.innerHTML = `
-          <div class="empty">
-            لا توجد فصول مضافة بعد 🌸
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-      newest.forEach((chapter) => {
-
-        const card =
-          document.createElement("div");
-
-        card.className = "latest-card";
-
-
-        let chapterText = "";
-
-        if (chapter.number !== "") {
-          chapterText +=
-            "الفصل " + chapter.number;
-        }
-
-        if (chapter.title) {
-
-          if (chapterText) {
-            chapterText += " — ";
-          }
-
-          chapterText += chapter.title;
-
-        }
-
-
-        if (!chapterText) {
-          chapterText = "فصل جديد";
-        }
-
-
-        card.innerHTML = `
-
-          <div class="latest-cover">
-
-            ${
-              chapter.cover
-                ? `
-                  <img
-                    src="${chapter.cover}"
-                    alt="${chapter.mangaTitle}"
-                    loading="lazy"
-                  >
-                `
-                : `
-                  <div
-                    style="
-                      height:230px;
-                      display:flex;
-                      align-items:center;
-                      justify-content:center;
-                      font-size:50px;
-                    "
-                  >
-                    🌸
-                  </div>
-                `
-            }
-
-          </div>
-
-
-          <div class="latest-content">
-
-            <h3>
-              ${chapter.mangaTitle}
-            </h3>
-
-            <div class="latest-chapter">
-              ${chapterText}
-            </div>
-
-          </div>
-
-        `;
-
-
-        card.addEventListener("click", () => {
-
-          window.location.href =
-            "manga.html?id=" +
-            encodeURIComponent(chapter.mangaId);
-
-        });
-
-
-        latestChapters.appendChild(card);
-
-      });
-
-
-    } catch (error) {
-
-      console.error(
-        "خطأ في تحميل آخر الفصول:",
-        error
-      );
-
-      latestChapters.innerHTML = `
-        <div class="empty">
-          تعذر تحميل آخر الفصول 🌸
-        </div>
-      `;
-
-    }
-
-  }
-
-
-  /* =========================
-     تحميل المانهوا
-  ========================= */
+  // تحميل المانهوا
 
   async function loadManga() {
 
@@ -808,11 +520,8 @@
       snapshot.forEach((item) => {
 
         allManga.push({
-
           id: item.id,
-
           ...item.data()
-
         });
 
       });
@@ -839,13 +548,9 @@
       console.error(error);
 
       mangaList.innerHTML = `
-
         <div class="empty">
-
           حدث خطأ أثناء تحميل المانهوا 🌸
-
         </div>
-
       `;
 
     }
@@ -853,9 +558,7 @@
   }
 
 
-  /* =========================
-     عرض المانهوا
-  ========================= */
+  // عرض المانهوا
 
   function displayManga(list) {
 
@@ -865,17 +568,11 @@
     if (list.length === 0) {
 
       mangaList.innerHTML = `
-
         <div class="empty">
-
           لم نجد مانهوا بهذا البحث 🌸
-
           <br>
-
           جربي اسمًا أو تصنيفًا آخر 💗
-
         </div>
-
       `;
 
       return;
@@ -892,11 +589,8 @@
 
 
       const genres =
-
         Array.isArray(data.genres)
-
           ? data.genres.join(" • ")
-
           : data.genres || "";
 
 
@@ -923,56 +617,31 @@
         <div class="cover-wrap">
 
           ${
-
             data.cover
-
               ? `
-
                 <img
-
                   src="${data.cover}"
-
                   alt="${data.title || "مانهوا"}"
-
                   loading="lazy"
-
                 >
-
               `
-
               : `
-
                 <div
-
                   style="
-
                     height:260px;
-
                     display:flex;
-
                     align-items:center;
-
                     justify-content:center;
-
                     font-size:50px;
-
                   "
-
                 >
-
                   🌸
-
                 </div>
-
               `
-
           }
 
-
           <div class="status ${statusClass}">
-
             ${mangaStatus}
-
           </div>
 
         </div>
@@ -981,43 +650,27 @@
         <div class="card-content">
 
           <h3>
-
             ${data.title || "بدون اسم"}
-
           </h3>
 
-
           <div class="description">
-
             ${data.description || "لا يوجد وصف."}
-
           </div>
 
-
           ${
-
             genres
-
               ? `
-
                 <div class="genres">
-
                   🏷️ ${genres}
-
                 </div>
-
               `
-
               : ""
-
           }
 
         </div>
 
       `;
 
-
-      /* نفس طريقة فتح المانهوا الأصلية */
 
       card.addEventListener("click", () => {
 
@@ -1035,9 +688,7 @@
   }
 
 
-  /* =========================
-     البحث + الفلترة
-  ========================= */
+  // البحث + الفلترة
 
   function search() {
 
@@ -1054,20 +705,13 @@
           (manga.title || "")
             .toLowerCase();
 
-
         const description =
           (manga.description || "")
             .toLowerCase();
 
-
         const genres =
-
           Array.isArray(manga.genres)
-
-            ? manga.genres
-                .join(" ")
-                .toLowerCase()
-
+            ? manga.genres.join(" ").toLowerCase()
             : "";
 
 
@@ -1076,29 +720,20 @@
 
 
         const matchesSearch =
-
           !value ||
-
           title.includes(value) ||
-
           description.includes(value) ||
-
           genres.includes(value);
 
 
         const matchesFilter =
-
           currentFilter === "all" ||
-
           status === currentFilter;
 
 
         return (
-
           matchesSearch &&
-
           matchesFilter
-
         );
 
       });
@@ -1109,7 +744,7 @@
   }
 
 
-  /* زر البحث */
+  // زر البحث
 
   searchButton.addEventListener(
     "click",
@@ -1117,7 +752,7 @@
   );
 
 
-  /* البحث المباشر */
+  // البحث المباشر
 
   searchInput.addEventListener(
     "input",
@@ -1125,21 +760,17 @@
   );
 
 
-  /* أزرار الحالة */
+  // أزرار الحالة
 
   filterButtons.forEach((button) => {
 
     button.addEventListener(
-
       "click",
-
       () => {
 
         filterButtons.forEach(
-
           (btn) =>
             btn.classList.remove("active")
-
         );
 
 
@@ -1153,17 +784,14 @@
         search();
 
       }
-
     );
 
   });
 
 
-  /* تشغيل الموقع */
+  // تشغيل الموقع
 
   loadManga();
-
-  loadLatestChapters();
 
 </script>
 
