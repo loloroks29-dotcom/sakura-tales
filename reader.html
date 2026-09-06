@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport"
+<meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>قراءة الفصل | Sakura Tales</title>
-
-<style>
+<title>قراءة الفصل | Sakura Tales</title><style>
 
 *{
   box-sizing:border-box;
@@ -47,6 +42,8 @@ body{
   border-bottom:1px solid #333;
 
   backdrop-filter:blur(10px);
+
+  transition:.25s;
 }
 
 .top-title{
@@ -90,6 +87,33 @@ body{
   cursor:pointer;
 }
 
+/* عداد الصفحة */
+
+.page-counter{
+  position:fixed;
+  top:68px;
+  left:50%;
+  transform:translateX(-50%);
+
+  z-index:1500;
+
+  background:rgba(30,15,22,.88);
+  color:#ffd1e4;
+
+  padding:7px 13px;
+
+  border-radius:20px;
+
+  font-size:12px;
+  font-weight:bold;
+
+  border:1px solid #4b2938;
+
+  backdrop-filter:blur(8px);
+
+  transition:.25s;
+}
+
 /* منطقة القراءة */
 
 #reader{
@@ -99,10 +123,7 @@ body{
   background:#000;
 }
 
-/*
-  في الوضع الطبيعي:
-  الصفحة تتحرك مع تمرير الهاتف بشكل طبيعي.
-*/
+/* الصفحة */
 
 .page-wrap{
   width:100%;
@@ -114,8 +135,6 @@ body{
 
   touch-action:pan-y;
 }
-
-/* الصورة */
 
 .page{
   display:block;
@@ -184,6 +203,42 @@ body{
   color:#ffd1e4;
 }
 
+/* زر أعلى الصفحة */
+
+#topBtn{
+  position:fixed;
+
+  right:15px;
+  bottom:80px;
+
+  z-index:2100;
+
+  width:45px;
+  height:45px;
+
+  border:0;
+  border-radius:50%;
+
+  background:#c46b91;
+  color:white;
+
+  font-size:20px;
+
+  cursor:pointer;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.35);
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:.25s;
+}
+
+#topBtn.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
 /* الشريط السفلي */
 
 .bottom-bar{
@@ -210,6 +265,8 @@ body{
   border-top:1px solid #333;
 
   backdrop-filter:blur(10px);
+
+  transition:.25s;
 }
 
 .nav-btn{
@@ -246,6 +303,52 @@ body{
   opacity:.35;
 }
 
+/* وضع القراءة الكامل */
+
+body.fullscreen .top-bar{
+  transform:translateY(-100%);
+}
+
+body.fullscreen .bottom-bar{
+  transform:translateY(100%);
+}
+
+body.fullscreen .page-counter{
+  opacity:.25;
+}
+
+body.fullscreen #topBtn{
+  bottom:20px;
+}
+
+/* زر وضع القراءة */
+
+.fullscreen-btn{
+  position:fixed;
+
+  left:15px;
+  bottom:80px;
+
+  z-index:2100;
+
+  width:45px;
+  height:45px;
+
+  border:0;
+  border-radius:50%;
+
+  background:#24151d;
+  color:#ffd1e4;
+
+  font-size:18px;
+
+  cursor:pointer;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.35);
+}
+
+/* الهاتف */
+
 @media(max-width:600px){
 
   .top-bar{
@@ -266,6 +369,12 @@ body{
     font-size:11px;
   }
 
+  .page-counter{
+    top:62px;
+    font-size:11px;
+    padding:6px 11px;
+  }
+
   .bottom-bar{
     height:62px;
     gap:6px;
@@ -278,91 +387,51 @@ body{
     font-size:12px;
   }
 
+  #topBtn{
+    right:12px;
+    bottom:72px;
+  }
+
+  .fullscreen-btn{
+    left:12px;
+    bottom:72px;
+  }
+
 }
 
-</style>
-</head>
-
-<body>
-
-
-<header class="top-bar">
-
-  <button
-    class="top-btn"
-    id="backBtn">
+</style></head><body><header class="top-bar">  <button class="top-btn" id="backBtn">
     ↩
-  </button>
+  </button>  <div class="top-title"><div class="manga-name" id="mangaTitle">
+  Sakura Tales
+</div>
 
-  <div class="top-title">
+<div class="chapter-name" id="chapterTitle">
+  جاري تحميل الفصل...
+</div>
 
-    <div
-      class="manga-name"
-      id="mangaTitle">
-      Sakura Tales
-    </div>
-
-    <div
-      class="chapter-name"
-      id="chapterTitle">
-      جاري تحميل الفصل...
-    </div>
-
-  </div>
-
-  <button
-    class="top-btn"
-    id="chaptersBtn">
+  </div>  <button class="top-btn" id="chaptersBtn">
     📚
-  </button>
+  </button></header><!-- عداد الصفحة --><div class="page-counter" id="pageCounter">
+  صفحة 0 / 0
+</div><main id="reader">  <div class="loading" id="loading"><div class="loading-heart">
+  🌸
+</div>
 
-</header>
+<div>
+  جاري تحميل الفصل...
+</div>
 
-
-<main id="reader">
-
-  <div
-    class="loading"
-    id="loading">
-
-    <div class="loading-heart">
-      🌸
-    </div>
-
-    <div>
-      جاري تحميل الفصل...
-    </div>
-
-  </div>
-
-</main>
-
-
-<nav class="bottom-bar">
-
-  <button
-    class="nav-btn"
-    id="prevBtn">
+  </div></main><!-- زر أعلى --><button id="topBtn">
+  ↑
+</button><!-- وضع القراءة --><button class="fullscreen-btn" id="fullscreenBtn">
+  👁
+</button><nav class="bottom-bar">  <button class="nav-btn" id="prevBtn">
     ⬅ السابق
-  </button>
-
-  <button
-    class="nav-btn main"
-    id="chaptersBottomBtn">
+  </button>  <button class="nav-btn main" id="chaptersBottomBtn">
     📚 الفصول
-  </button>
-
-  <button
-    class="nav-btn"
-    id="nextBtn">
+  </button>  <button class="nav-btn" id="nextBtn">
     التالي ➡
-  </button>
-
-</nav>
-
-
-<script type="module">
-
+  </button></nav><script type="module">
 
 import { db } from "./firebase.js";
 
@@ -417,14 +486,30 @@ const chaptersBottomBtn =
   );
 
 const prevBtn =
-  document.getElementById(
-    "prevBtn"
-  );
+  document.getElementById("prevBtn");
 
 const nextBtn =
+  document.getElementById("nextBtn");
+
+const pageCounter =
   document.getElementById(
-    "nextBtn"
+    "pageCounter"
   );
+
+const topBtn =
+  document.getElementById(
+    "topBtn"
+  );
+
+const fullscreenBtn =
+  document.getElementById(
+    "fullscreenBtn"
+  );
+
+
+/* عدد الصفحات */
+
+let totalPages = 0;
 
 
 /* البداية */
@@ -537,6 +622,13 @@ async function loadReader(){
     }
 
 
+    totalPages =
+      pages.length;
+
+    pageCounter.textContent =
+      `صفحة 1 / ${totalPages}`;
+
+
     loading.remove();
 
 
@@ -551,6 +643,8 @@ async function loadReader(){
       }
     );
 
+
+    setupPageCounter();
 
     await setupChapterNavigation();
 
@@ -582,6 +676,9 @@ function createPage(
 
   wrap.className =
     "page-wrap";
+
+  wrap.dataset.page =
+    index + 1;
 
 
   const img =
@@ -630,11 +727,63 @@ function createPage(
 }
 
 
-/*
-================================
-نظام التكبير والتحريك الجديد
-================================
-*/
+/* عداد الصفحة */
+
+function setupPageCounter(){
+
+  const pageElements =
+    document.querySelectorAll(
+      ".page-wrap"
+    );
+
+
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        let visiblePage = 1;
+
+        entries.forEach(
+          entry => {
+
+            if(
+              entry.isIntersecting
+            ){
+
+              visiblePage =
+                Number(
+                  entry.target.dataset.page
+                );
+
+            }
+
+          }
+        );
+
+
+        pageCounter.textContent =
+          `صفحة ${visiblePage} / ${totalPages}`;
+
+      },
+      {
+        root:null,
+        threshold:.35
+      }
+    );
+
+
+  pageElements.forEach(
+    page => {
+
+      observer.observe(page);
+
+    }
+  );
+
+}
+
+
+/* نظام التكبير */
 
 function setupZoom(
   wrap,
@@ -660,11 +809,6 @@ function setupZoom(
   const MAX_ZOOM = 5;
 
 
-  /*
-    حجم الصورة الحقيقي
-    بعد تحميلها
-  */
-
   function getBounds(){
 
     const rect =
@@ -684,22 +828,14 @@ function setupZoom(
       height * scale;
 
 
-    /*
-      الحد الأفقي
-    */
-
-    let maxX =
+    const maxX =
       Math.max(
         0,
         (scaledWidth - rect.width) / 2
       );
 
 
-    /*
-      الحد العمودي
-    */
-
-    let maxY =
+    const maxY =
       Math.max(
         0,
         (scaledHeight - rect.height) / 2
@@ -713,10 +849,6 @@ function setupZoom(
 
   }
 
-
-  /*
-    منع الصورة من الخروج
-  */
 
   function clamp(){
 
@@ -746,10 +878,6 @@ function setupZoom(
   }
 
 
-  /*
-    تطبيق الحركة
-  */
-
   function render(){
 
     clamp();
@@ -761,14 +889,7 @@ function setupZoom(
   }
 
 
-  /*
-    المسافة بين إصبعين
-  */
-
-  function distance(
-    a,
-    b
-  ){
+  function distance(a,b){
 
     const dx =
       b.clientX -
@@ -786,18 +907,9 @@ function setupZoom(
   }
 
 
-  /*
-    بداية اللمس
-  */
-
   wrap.addEventListener(
     "touchstart",
     event => {
-
-      /*
-        إصبعين:
-        بداية التكبير
-      */
 
       if(
         event.touches.length === 2
@@ -818,12 +930,6 @@ function setupZoom(
 
       }
 
-
-      /*
-        إصبع واحد:
-        يسمح بالتحريك فقط
-        إذا كانت الصورة مكبرة
-      */
 
       if(
         event.touches.length === 1 &&
@@ -851,18 +957,9 @@ function setupZoom(
   );
 
 
-  /*
-    حركة اللمس
-  */
-
   wrap.addEventListener(
     "touchmove",
     event => {
-
-
-      /*
-        إصبعين = تكبير وتصغير
-      */
 
       if(
         event.touches.length === 2
@@ -901,21 +998,14 @@ function setupZoom(
 
           render();
 
-
           event.preventDefault();
 
         }
-
 
         return;
 
       }
 
-
-      /*
-        إصبع واحد + تكبير
-        = تحريك كامل
-      */
 
       if(
         event.touches.length === 1 &&
@@ -947,7 +1037,6 @@ function setupZoom(
 
         render();
 
-
         event.preventDefault();
 
       }
@@ -959,18 +1048,9 @@ function setupZoom(
   );
 
 
-  /*
-    انتهاء اللمس
-  */
-
   wrap.addEventListener(
     "touchend",
-    event => {
-
-      /*
-        إذا وصل التكبير
-        للحجم الطبيعي
-      */
+    () => {
 
       if(
         scale <= 1.01
@@ -985,16 +1065,9 @@ function setupZoom(
 
       }
 
-    },
-    {
-      passive:false
     }
   );
 
-
-  /*
-    إذا تغير حجم الشاشة
-  */
 
   window.addEventListener(
     "resize",
@@ -1014,7 +1087,7 @@ function setupZoom(
 }
 
 
-/* الرجوع */
+/* زر الرجوع */
 
 backBtn.addEventListener(
   "click",
@@ -1055,6 +1128,76 @@ chaptersBtn.addEventListener(
 chaptersBottomBtn.addEventListener(
   "click",
   goToChapters
+);
+
+
+/* وضع القراءة الكامل */
+
+fullscreenBtn.addEventListener(
+  "click",
+  () => {
+
+    document.body.classList.toggle(
+      "fullscreen"
+    );
+
+
+    if(
+      document.body.classList.contains(
+        "fullscreen"
+      )
+    ){
+
+      fullscreenBtn.textContent =
+        "👁️‍🗨️";
+
+    }else{
+
+      fullscreenBtn.textContent =
+        "👁";
+
+    }
+
+  }
+);
+
+
+/* زر أعلى */
+
+window.addEventListener(
+  "scroll",
+  () => {
+
+    if(
+      window.scrollY > 500
+    ){
+
+      topBtn.classList.add(
+        "show"
+      );
+
+    }else{
+
+      topBtn.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+topBtn.addEventListener(
+  "click",
+  () => {
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
 );
 
 
@@ -1223,7 +1366,5 @@ function showError(
 
 }
 
-</script>
-
-</body>
+</script></body>
 </html>
