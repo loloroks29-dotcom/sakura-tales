@@ -39,7 +39,7 @@
     /* الصفحة */
 
     main {
-      max-width: 850px;
+      max-width: 900px;
       margin: auto;
       padding: 25px 15px 50px;
     }
@@ -48,50 +48,96 @@
 
     .info {
       background: #ffffff;
-      border: 1px solid #f6e1e9;
-      border-radius: 22px;
+      border: 1px solid #f4dce6;
+      border-radius: 24px;
       padding: 25px;
-      text-align: center;
-      box-shadow: 0 4px 18px rgba(180, 120, 145, .06);
+      box-shadow: 0 5px 20px rgba(180, 120, 145, .07);
       margin-bottom: 20px;
+    }
+
+    .manga-top {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .cover-box {
+      flex-shrink: 0;
     }
 
     .cover {
       width: 190px;
       height: 270px;
       object-fit: cover;
-      border-radius: 16px;
-      border: 1px solid #f3d7e2;
+      border-radius: 18px;
+      border: 1px solid #f1d3df;
+      box-shadow: 0 5px 18px rgba(180, 100, 135, .12);
+      display: block;
+    }
+
+    .no-cover {
+      width: 190px;
+      height: 270px;
+      border-radius: 18px;
+      background: #fff1f6;
+      border: 1px solid #f1d3df;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 55px;
+    }
+
+    .manga-details {
+      flex: 1;
     }
 
     h1 {
       color: #d984a5;
-      font-size: 25px;
-      margin: 18px 0 10px;
-    }
-
-    .genres {
-      color: #b98a9d;
-      margin: 10px 0;
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .description {
-      line-height: 1.9;
-      max-width: 650px;
-      margin: 15px auto;
-      color: #777;
-      font-size: 14px;
+      font-size: 27px;
+      margin: 0 0 12px;
+      line-height: 1.5;
     }
 
     .status {
       display: inline-block;
       background: #fff0f6;
       color: #d47f9f;
-      padding: 6px 12px;
+      padding: 7px 13px;
       border-radius: 20px;
       font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .genres {
+      color: #b98a9d;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* الوصف */
+
+    .description-box {
+      margin-top: 22px;
+      padding: 17px 18px;
+
+      background: #fffafd;
+      border: 1px solid #f4dce6;
+      border-radius: 16px;
+    }
+
+    .description-title {
+      color: #d984a5;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      line-height: 1.9;
+      color: #777;
+      font-size: 14px;
     }
 
     /* قسم الفصول */
@@ -111,7 +157,7 @@
       margin: 5px 0 20px;
     }
 
-    /* الفصل */
+    /* بطاقة الفصل */
 
     .chapter {
       display: flex;
@@ -135,8 +181,6 @@
       transform: translateY(-1px);
     }
 
-    /* رقم الفصل */
-
     .chapter-number {
       width: 42px;
       height: 42px;
@@ -155,8 +199,6 @@
       font-size: 14px;
       font-weight: bold;
     }
-
-    /* معلومات الفصل */
 
     .chapter-info {
       flex: 1;
@@ -178,8 +220,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
-    /* زر القراءة */
 
     .read {
       flex-shrink: 0;
@@ -203,16 +243,12 @@
       background: #ed9fbd;
     }
 
-    /* لا توجد فصول */
-
     .empty {
       text-align: center;
       padding: 30px 10px;
       color: #c39aaa;
       font-size: 14px;
     }
-
-    /* العودة */
 
     .back {
       display: inline-block;
@@ -231,21 +267,50 @@
       }
 
       .info {
-        padding: 20px 15px;
-        border-radius: 18px;
+        padding: 18px 14px;
+        border-radius: 19px;
+      }
+
+      .manga-top {
+        gap: 15px;
+        align-items: flex-start;
       }
 
       .cover {
-        width: 160px;
-        height: 230px;
+        width: 125px;
+        height: 180px;
+        border-radius: 14px;
+      }
+
+      .no-cover {
+        width: 125px;
+        height: 180px;
+        border-radius: 14px;
+        font-size: 40px;
       }
 
       h1 {
-        font-size: 21px;
+        font-size: 19px;
+        margin-bottom: 9px;
+      }
+
+      .status {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+
+      .genres {
+        font-size: 11px;
+      }
+
+      .description-box {
+        margin-top: 17px;
+        padding: 14px;
       }
 
       .description {
-        font-size: 13px;
+        font-size: 12px;
+        line-height: 1.8;
       }
 
       .chapters {
@@ -273,10 +338,27 @@
         padding: 8px 10px;
         font-size: 11px;
       }
-
     }
 
     @media (max-width: 380px) {
+
+      .manga-top {
+        gap: 10px;
+      }
+
+      .cover {
+        width: 110px;
+        height: 160px;
+      }
+
+      .no-cover {
+        width: 110px;
+        height: 160px;
+      }
+
+      h1 {
+        font-size: 17px;
+      }
 
       .chapter-name {
         font-size: 11px;
@@ -285,11 +367,11 @@
       .read {
         padding: 8px;
       }
-
     }
 
   </style>
 </head>
+
 
 <body>
 
@@ -394,32 +476,65 @@
           : data.genres || "";
 
 
+      const coverHTML =
+        data.cover
+          ? `
+            <img
+              class="cover"
+              src="${data.cover}"
+              alt="${data.title || ""}"
+            >
+          `
+          : `
+            <div class="no-cover">
+              🌸
+            </div>
+          `;
+
+
       mangaInfo.innerHTML = `
 
-        ${
-          data.cover
-            ? `<img
-                class="cover"
-                src="${data.cover}"
-                alt="${data.title || ""}"
-              >`
-            : ""
-        }
+        <div class="manga-top">
 
-        <h1>
-          ${data.title || "بدون اسم"}
-        </h1>
+          <div class="cover-box">
+            ${coverHTML}
+          </div>
 
-        <div class="status">
-          ${data.status || "غير محددة"}
+          <div class="manga-details">
+
+            <h1>
+              ${data.title || "بدون اسم"}
+            </h1>
+
+            <div class="status">
+              ${data.status || "غير محددة"}
+            </div>
+
+            ${
+              genres
+                ? `
+                  <div class="genres">
+                    ${genres}
+                  </div>
+                `
+                : ""
+            }
+
+          </div>
+
         </div>
 
-        <div class="genres">
-          ${genres}
-        </div>
 
-        <div class="description">
-          ${data.description || "لا يوجد وصف."}
+        <div class="description-box">
+
+          <div class="description-title">
+            ✿ نبذة عن المانهوا
+          </div>
+
+          <div class="description">
+            ${data.description || "لا يوجد وصف لهذه المانهوا."}
+          </div>
+
         </div>
 
       `;
@@ -496,6 +611,7 @@
         const div =
           document.createElement("div");
 
+
         div.className =
           "chapter";
 
@@ -503,8 +619,10 @@
         const number =
           document.createElement("div");
 
+
         number.className =
           "chapter-number";
+
 
         number.textContent =
           chapter.number || "";
@@ -513,6 +631,7 @@
         const info =
           document.createElement("div");
 
+
         info.className =
           "chapter-info";
 
@@ -520,8 +639,10 @@
         const label =
           document.createElement("div");
 
+
         label.className =
           "chapter-label";
+
 
         label.textContent =
           "الفصل " +
@@ -531,8 +652,10 @@
         const name =
           document.createElement("div");
 
+
         name.className =
           "chapter-name";
+
 
         name.textContent =
           chapter.title ||
@@ -546,8 +669,10 @@
         const link =
           document.createElement("a");
 
+
         link.className =
           "read";
+
 
         link.textContent =
           "قراءة 💗";
