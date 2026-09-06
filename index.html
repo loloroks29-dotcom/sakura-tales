@@ -1,1151 +1,743 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Sakura Tales 🌸</title>  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff7fb;
-      color: #633f51;
-    }
-
-    header {
-      position: relative;
-      overflow: hidden;
-      padding: 55px 20px 55px;
-      text-align: center;
-      background: linear-gradient(
-        135deg,
-        #ffd9e9,
-        #f4aecb,
-        #e9a0c1
-      );
-    }
-
-    header::before {
-      content: "🌸";
-      position: absolute;
-      font-size: 90px;
-      left: 5%;
-      top: 5px;
-      opacity: .35;
-    }
-
-    header::after {
-      content: "🌸";
-      position: absolute;
-      font-size: 70px;
-      right: 7%;
-      bottom: 0;
-      opacity: .35;
-    }
-
-    .logo {
-      position: relative;
-      z-index: 1;
-    }
-
-    .logo h1 {
-      margin: 0;
-      color: #8f4668;
-      font-size: 38px;
-    }
-
-    .logo p {
-      margin: 10px 0 0;
-      color: #75485e;
-      font-size: 16px;
-    }
-
-    .search-area {
-      max-width: 700px;
-      margin: -28px auto 25px;
-      padding: 0 15px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .search-box {
-      display: flex;
-      background: white;
-      border-radius: 20px;
-      padding: 8px;
-      box-shadow: 0 8px 25px rgba(150, 70, 110, .15);
-    }
-
-    .search-box input {
-      flex: 1;
-      border: 0;
-      outline: 0;
-      padding: 13px;
-      font-size: 15px;
-      background: transparent;
-      color: #633f51;
-      min-width: 0;
-    }
-
-    .search-box button {
-      border: 0;
-      border-radius: 13px;
-      padding: 0 20px;
-      background: #d96f9d;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .search-box button:hover {
-      background: #c85d8d;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: auto;
-      padding: 0 15px 50px;
-    }
-
-    .section-title {
-      text-align: center;
-      margin: 25px 0 20px;
-    }
-
-    .section-title h2 {
-      color: #a64f78;
-      margin-bottom: 7px;
-    }
-
-    .section-title p {
-      color: #8b6878;
-      margin-top: 0;
-    }
-
-    /* =========================
-       آخر الفصول
-    ========================= */
-
-    .latest-chapters {
-      margin: 35px 0 45px;
-    }
-
-    .latest-chapters-title {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .latest-chapters-title h2 {
-      color: #a64f78;
-      margin: 0 0 7px;
-    }
-
-    .latest-chapters-title p {
-      color: #8b6878;
-      margin: 0;
-    }
-
-    .chapters-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .chapter-card {
-      background: white;
-      border-radius: 17px;
-      padding: 14px 17px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      cursor: pointer;
-      box-shadow: 0 5px 18px rgba(160, 80, 120, .10);
-      border: 1px solid #f6dce8;
-      transition:
-        transform .2s,
-        box-shadow .2s;
-    }
-
-    .chapter-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 9px 23px rgba(160, 80, 120, .16);
-    }
-
-    .chapter-info {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .chapter-manga {
-      color: #9b4770;
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chapter-name {
-      color: #806372;
-      font-size: 13px;
-    }
-
-    .chapter-date {
-      color: #b15c82;
-      font-size: 11px;
-      margin-top: 5px;
-    }
-
-    .chapter-badge {
-      flex-shrink: 0;
-      background: #ffe1ed;
-      color: #9b4770;
-      padding: 8px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .latest-empty {
-      text-align: center;
-      background: white;
-      border-radius: 18px;
-      padding: 30px 20px;
-      color: #8b6878;
-      box-shadow: 0 5px 18px rgba(160, 80, 120, .08);
-    }
-
-    /* الفلاتر */
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 25px;
-    }
-
-    .filter-btn {
-      border: 1px solid #efc4d7;
-      background: white;
-      color: #9b4770;
-      padding: 9px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: .2s;
-    }
-
-    .filter-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .filter-btn.active {
-      background: #d96f9d;
-      color: white;
-      border-color: #d96f9d;
-    }
-
-    /* شبكة المانهوا */
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(
-        auto-fill,
-        minmax(180px, 1fr)
-      );
-      gap: 20px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 6px 22px rgba(160, 80, 120, .12);
-      cursor: pointer;
-      transition:
-        transform .2s,
-        box-shadow .2s;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 28px rgba(160, 80, 120, .18);
-    }
-
-    .cover-wrap {
-      position: relative;
-      background: #f8dce9;
-      overflow: hidden;
-    }
-
-    .card img {
-      width: 100%;
-      height: 260px;
-      display: block;
-      object-fit: cover;
-      transition: transform .3s;
-    }
-
-    .card:hover img {
-      transform: scale(1.03);
-    }
-
-    .status {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(255,255,255,.94);
-      color: #9b4770;
-      padding: 6px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: bold;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
-    }
-
-    .status.completed {
-      color: #4b8a68;
-    }
-
-    .status.paused {
-      color: #b27a3c;
-    }
-
-    .card-content {
-      padding: 15px;
-    }
-
-    .card h3 {
-      color: #9b4770;
-      margin: 0 0 9px;
-      font-size: 18px;
-      line-height: 1.4;
-    }
-
-    .description {
-      color: #806372;
-      font-size: 13px;
-      line-height: 1.6;
-
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-
-      min-height: 42px;
-    }
-
-    .genres {
-      margin-top: 10px;
-      color: #b15c82;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      background: white;
-      border-radius: 18px;
-      padding: 45px 20px;
-      color: #8b6878;
-      box-shadow: 0 5px 18px rgba(160, 80, 120, .08);
-    }
-
-    footer {
-      text-align: center;
-      padding: 28px 15px;
-      background: #ffe8f1;
-      color: #8f4668;
-    }
-
-    footer small {
-      line-height: 2;
-    }
-
-    /* الهاتف */
-
-    @media (max-width: 600px) {
-
-      header {
-        padding: 45px 15px 50px;
-      }
-
-      .logo h1 {
-        font-size: 29px;
-      }
-
-      .logo p {
-        font-size: 14px;
-      }
-
-      .search-area {
-        margin-top: -24px;
-      }
-
-      .search-box {
-        padding: 6px;
-      }
-
-      .search-box input {
-        padding: 12px 9px;
-        font-size: 14px;
-      }
-
-      .search-box button {
-        padding: 0 14px;
-      }
-
-      main {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
-      .section-title {
-        margin-top: 20px;
-      }
-
-      .section-title h2 {
-        font-size: 21px;
-      }
-
-      .filters {
-        gap: 6px;
-      }
-
-      .filter-btn {
-        padding: 8px 12px;
-        font-size: 12px;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .card {
-        border-radius: 16px;
-      }
-
-      .card img {
-        height: 220px;
-      }
-
-      .card-content {
-        padding: 11px;
-      }
-
-      .card h3 {
-        font-size: 15px;
-      }
-
-      .description {
-        font-size: 12px;
-        line-height: 1.5;
-      }
-
-      .genres {
-        font-size: 11px;
-      }
-
-      .status {
-        top: 7px;
-        right: 7px;
-        padding: 5px 8px;
-        font-size: 10px;
-      }
-
-      .chapter-card {
-        padding: 12px;
-      }
-
-      .chapter-manga {
-        font-size: 14px;
-      }
-
-      .chapter-name {
-        font-size: 12px;
-      }
-
-      .chapter-badge {
-        padding: 7px 9px;
-        font-size: 10px;
-      }
-    }
-  </style></head><body><header>  <div class="logo">
-    <h1>🌸 Sakura Tales</h1>
-    <p>عالم من المانهوا والقصص الجميلة 💗</p>
-  </div></header><div class="search-area">  <div class="search-box"><input
-  id="searchInput"
-  type="search"
-  placeholder="🔍 ابحثي عن مانهوا..."
->
-
-<button id="searchButton">
-  بحث
+<!DOCTYPE html>  <html lang="ar" dir="rtl">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Sakura Tales 🌸</title>    <style>  
+    * {  
+      box-sizing: border-box;  
+    }  
+  
+    html {  
+      scroll-behavior: smooth;  
+    }  
+  
+    body {  
+      margin: 0;  
+      font-family: Arial, sans-serif;  
+      background: #fff7fb;  
+      color: #633f51;  
+    }  
+  
+    header {  
+      position: relative;  
+      overflow: hidden;  
+      padding: 55px 20px 55px;  
+      text-align: center;  
+      background: linear-gradient(  
+        135deg,  
+        #ffd9e9,  
+        #f4aecb,  
+        #e9a0c1  
+      );  
+    }  
+  
+    header::before {  
+      content: "🌸";  
+      position: absolute;  
+      font-size: 90px;  
+      left: 5%;  
+      top: 5px;  
+      opacity: .35;  
+    }  
+  
+    header::after {  
+      content: "🌸";  
+      position: absolute;  
+      font-size: 70px;  
+      right: 7%;  
+      bottom: 0;  
+      opacity: .35;  
+    }  
+  
+    .logo {  
+      position: relative;  
+      z-index: 1;  
+    }  
+  
+    .logo h1 {  
+      margin: 0;  
+      color: #8f4668;  
+      font-size: 38px;  
+    }  
+  
+    .logo p {  
+      margin: 10px 0 0;  
+      color: #75485e;  
+      font-size: 16px;  
+    }  
+  
+    .search-area {  
+      max-width: 700px;  
+      margin: -28px auto 25px;  
+      padding: 0 15px;  
+      position: relative;  
+      z-index: 2;  
+    }  
+  
+    .search-box {  
+      display: flex;  
+      background: white;  
+      border-radius: 20px;  
+      padding: 8px;  
+      box-shadow: 0 8px 25px rgba(150, 70, 110, .15);  
+    }  
+  
+    .search-box input {  
+      flex: 1;  
+      border: 0;  
+      outline: 0;  
+      padding: 13px;  
+      font-size: 15px;  
+      background: transparent;  
+      color: #633f51;  
+      min-width: 0;  
+    }  
+  
+    .search-box button {  
+      border: 0;  
+      border-radius: 13px;  
+      padding: 0 20px;  
+      background: #d96f9d;  
+      color: white;  
+      font-size: 15px;  
+      cursor: pointer;  
+    }  
+  
+    .search-box button:hover {  
+      background: #c85d8d;  
+    }  
+  
+    main {  
+      max-width: 1100px;  
+      margin: auto;  
+      padding: 0 15px 50px;  
+    }  
+  
+    .section-title {  
+      text-align: center;  
+      margin: 25px 0 20px;  
+    }  
+  
+    .section-title h2 {  
+      color: #a64f78;  
+      margin-bottom: 7px;  
+    }  
+  
+    .section-title p {  
+      color: #8b6878;  
+      margin-top: 0;  
+    }  
+  
+    /* الفلاتر */  
+  
+    .filters {  
+      display: flex;  
+      flex-wrap: wrap;  
+      justify-content: center;  
+      gap: 8px;  
+      margin-bottom: 25px;  
+    }  
+  
+    .filter-btn {  
+      border: 1px solid #efc4d7;  
+      background: white;  
+      color: #9b4770;  
+      padding: 9px 15px;  
+      border-radius: 20px;  
+      cursor: pointer;  
+      font-size: 13px;  
+      transition: .2s;  
+    }  
+  
+    .filter-btn:hover {  
+      transform: translateY(-2px);  
+    }  
+  
+    .filter-btn.active {  
+      background: #d96f9d;  
+      color: white;  
+      border-color: #d96f9d;  
+    }  
+  
+    /* شبكة المانهوا */  
+  
+    .grid {  
+      display: grid;  
+      grid-template-columns: repeat(  
+        auto-fill,  
+        minmax(180px, 1fr)  
+      );  
+      gap: 20px;  
+    }  
+  
+    .card {  
+      background: white;  
+      border-radius: 20px;  
+      overflow: hidden;  
+      box-shadow: 0 6px 22px rgba(160, 80, 120, .12);  
+      cursor: pointer;  
+      transition:  
+        transform .2s,  
+        box-shadow .2s;  
+    }  
+  
+    .card:hover {  
+      transform: translateY(-6px);  
+      box-shadow: 0 12px 28px rgba(160, 80, 120, .18);  
+    }  
+  
+    .cover-wrap {  
+      position: relative;  
+      background: #f8dce9;  
+      overflow: hidden;  
+    }  
+  
+    .card img {  
+      width: 100%;  
+      height: 260px;  
+      display: block;  
+      object-fit: cover;  
+      transition: transform .3s;  
+    }  
+  
+    .card:hover img {  
+      transform: scale(1.03);  
+    }  
+  
+    .status {  
+      position: absolute;  
+      top: 10px;  
+      right: 10px;  
+      background: rgba(255,255,255,.94);  
+      color: #9b4770;  
+      padding: 6px 10px;  
+      border-radius: 10px;  
+      font-size: 12px;  
+      font-weight: bold;  
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);  
+    }  
+  
+    .status.completed {  
+      color: #4b8a68;  
+    }  
+  
+    .status.paused {  
+      color: #b27a3c;  
+    }  
+  
+    .card-content {  
+      padding: 15px;  
+    }  
+  
+    .card h3 {  
+      color: #9b4770;  
+      margin: 0 0 9px;  
+      font-size: 18px;  
+      line-height: 1.4;  
+    }  
+  
+    .description {  
+      color: #806372;  
+      font-size: 13px;  
+      line-height: 1.6;  
+  
+      display: -webkit-box;  
+      -webkit-line-clamp: 3;  
+      -webkit-box-orient: vertical;  
+      overflow: hidden;  
+  
+      min-height: 42px;  
+    }  
+  
+    .genres {  
+      margin-top: 10px;  
+      color: #b15c82;  
+      font-size: 12px;  
+      line-height: 1.6;  
+    }  
+  
+    .empty {  
+      grid-column: 1 / -1;  
+      text-align: center;  
+      background: white;  
+      border-radius: 18px;  
+      padding: 45px 20px;  
+      color: #8b6878;  
+      box-shadow: 0 5px 18px rgba(160, 80, 120, .08);  
+    }  
+  
+    footer {  
+      text-align: center;  
+      padding: 28px 15px;  
+      background: #ffe8f1;  
+      color: #8f4668;  
+    }  
+  
+    footer small {  
+      line-height: 2;  
+    }  
+  
+    /* الهاتف */  
+  
+    @media (max-width: 600px) {  
+  
+      header {  
+        padding: 45px 15px 50px;  
+      }  
+  
+      .logo h1 {  
+        font-size: 29px;  
+      }  
+  
+      .logo p {  
+        font-size: 14px;  
+      }  
+  
+      .search-area {  
+        margin-top: -24px;  
+      }  
+  
+      .search-box {  
+        padding: 6px;  
+      }  
+  
+      .search-box input {  
+        padding: 12px 9px;  
+        font-size: 14px;  
+      }  
+  
+      .search-box button {  
+        padding: 0 14px;  
+      }  
+  
+      main {  
+        padding-left: 10px;  
+        padding-right: 10px;  
+      }  
+  
+      .section-title {  
+        margin-top: 20px;  
+      }  
+  
+      .section-title h2 {  
+        font-size: 21px;  
+      }  
+  
+      .filters {  
+        gap: 6px;  
+      }  
+  
+      .filter-btn {  
+        padding: 8px 12px;  
+        font-size: 12px;  
+      }  
+  
+      .grid {  
+        grid-template-columns: repeat(2, 1fr);  
+        gap: 12px;  
+      }  
+  
+      .card {  
+        border-radius: 16px;  
+      }  
+  
+      .card img {  
+        height: 220px;  
+      }  
+  
+      .card-content {  
+        padding: 11px;  
+      }  
+  
+      .card h3 {  
+        font-size: 15px;  
+      }  
+  
+      .description {  
+        font-size: 12px;  
+        line-height: 1.5;  
+      }  
+  
+      .genres {  
+        font-size: 11px;  
+      }  
+  
+      .status {  
+        top: 7px;  
+        right: 7px;  
+        padding: 5px 8px;  
+        font-size: 10px;  
+      }  
+    }  
+  </style>  </head>  <body>  <header>    <div class="logo">  
+    <h1>🌸 Sakura Tales</h1>  
+    <p>عالم من المانهوا والقصص الجميلة 💗</p>  
+  </div>  </header>  <div class="search-area">    <div class="search-box">  <input  
+  id="searchInput"  
+  type="search"  
+  placeholder="🔍 ابحثي عن مانهوا..."  
+>  
+
+<button id="searchButton">  
+  بحث  
 </button>
 
-  </div></div><main>  <!-- =========================
-       آخر الفصول
-  ========================== -->  <section class="latest-chapters"><div class="latest-chapters-title">
+  </div>  </div>  <main>    <div class="section-title">  <h2>📚 أحدث المانهوا</h2>  
 
-  <h2>🆕 آخر الفصول</h2>
-
-  <p>
-    أحدث الفصول المضافة إلى Sakura Tales 🌸
-  </p>
-
-</div>
-
-<div
-  id="latestChapters"
-  class="chapters-list"
->
-
-  <div class="latest-empty">
-    جاري تحميل آخر الفصول... 🌸
-  </div>
-
-</div>
-
-  </section>  <div class="section-title"><h2>📚 أحدث المانهوا</h2>
-
-<p>
-  اختاري قصتك المفضلة وابدئي القراءة 🌸
+<p>  
+  اختاري قصتك المفضلة وابدئي القراءة 🌸  
 </p>
 
-  </div>  <!-- الفلاتر -->  <div class="filters"><button
-  class="filter-btn active"
-  data-filter="all">
-  الكل
+  </div>    <!-- الفلاتر -->    <div class="filters">  <button  
+  class="filter-btn active"  
+  data-filter="all">  
+  الكل  
+</button>  
+
+<button  
+  class="filter-btn"  
+  data-filter="مستمرة">  
+  🟢 مستمرة  
+</button>  
+
+<button  
+  class="filter-btn"  
+  data-filter="مكتملة">  
+  🔵 مكتملة  
+</button>  
+
+<button  
+  class="filter-btn"  
+  data-filter="متوقفة">  
+  🟡 متوقفة  
 </button>
 
-<button
-  class="filter-btn"
-  data-filter="مستمرة">
-  🟢 مستمرة
-</button>
-
-<button
-  class="filter-btn"
-  data-filter="مكتملة">
-  🔵 مكتملة
-</button>
-
-<button
-  class="filter-btn"
-  data-filter="متوقفة">
-  🟡 متوقفة
-</button>
-
-  </div>  <div id="mangaList" class="grid"><div class="empty">
-  جاري تحميل المانهوا... 🌸
+  </div>    <div id="mangaList" class="grid">  <div class="empty">  
+  جاري تحميل المانهوا... 🌸  
 </div>
 
-  </div></main><footer>🌸 Sakura Tales
+  </div>  </main>  <footer>  🌸 Sakura Tales
 <br>
 
-  <small>
-    حكايات جميلة تبدأ من هنا 💗
-  </small></footer><script type="module">
-
-  import { db } from "./firebase.js";
-
-  import {
-    collection,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-  const mangaList =
-    document.getElementById("mangaList");
-
-  const latestChapters =
-    document.getElementById("latestChapters");
-
-  const searchInput =
-    document.getElementById("searchInput");
-
-  const searchButton =
-    document.getElementById("searchButton");
-
-  const filterButtons =
-    document.querySelectorAll(".filter-btn");
-
-
-  let allManga = [];
-
-  let currentFilter = "all";
-
-
-  // ==========================================
-  // تحويل التاريخ إلى رقم للمقارنة بأمان
-  // ==========================================
-
-  function getDateValue(value) {
-
-    if (!value) {
-      return 0;
-    }
-
-    // Firebase Timestamp
-    if (
-      typeof value === "object" &&
-      typeof value.toMillis === "function"
-    ) {
-      return value.toMillis();
-    }
-
-    // Firebase Timestamp بصيغة seconds
-    if (
-      typeof value === "object" &&
-      typeof value.seconds === "number"
-    ) {
-      return value.seconds * 1000;
-    }
-
-    // تاريخ عادي
-    const date =
-      new Date(value).getTime();
-
-    return isNaN(date)
-      ? 0
-      : date;
-
-  }
-
-
-  // ==========================================
-  // الحصول على اسم الفصل
-  // ==========================================
-
-  function getChapterName(chapter) {
-
-    return (
-      chapter.title ||
-      chapter.name ||
-      chapter.chapterTitle ||
-      chapter.chapter ||
-      chapter.number ||
-      "فصل جديد"
-    );
-
-  }
-
-
-  // ==========================================
-  // تحميل آخر الفصول
-  // ==========================================
-
-  async function loadLatestChapters(mangaListData) {
-
-    try {
-
-      const chapters = [];
-
-
-      /*
-        نقرأ:
-
-        manga
-          └── اسم المانهوا
-                └── chapters
-      */
-
-      for (const manga of mangaListData) {
-
-        try {
-
-          const chaptersSnapshot =
-            await getDocs(
-              collection(
-                db,
-                "manga",
-                manga.id,
-                "chapters"
-              )
-            );
-
-
-          chaptersSnapshot.forEach((chapterDoc) => {
-
-            const chapterData =
-              chapterDoc.data();
-
-
-            const date =
-              chapterData.createdAt ||
-              chapterData.updatedAt ||
-              chapterData.date ||
-              chapterData.timestamp ||
-              null;
-
-
-            chapters.push({
-
-              id: chapterDoc.id,
-
-              mangaId: manga.id,
-
-              mangaTitle:
-                manga.title ||
-                "مانهوا بدون اسم",
-
-              cover:
-                manga.cover || "",
-
-              chapterName:
-                getChapterName(
-                  chapterData
-                ),
-
-              dateValue:
-                getDateValue(date)
-
-            });
-
-          });
-
-        } catch (chapterError) {
-
-          /*
-            إذا كانت مانهوا معينة لا تحتوي
-            على chapters أو حدث خطأ فيها،
-            نتجاهلها ونكمل بقية المانهوا.
-          */
-
-          console.warn(
-            "تعذر تحميل فصول:",
-            manga.id,
-            chapterError
-          );
-
-        }
-
-      }
-
-
-      // الأحدث أولًا
-
-      chapters.sort((a, b) => {
-
-        return b.dateValue - a.dateValue;
-
-      });
-
-
-      // نعرض أحدث 10 فصول فقط
-
-      const latest =
-        chapters.slice(0, 10);
-
-
-      displayLatestChapters(latest);
-
-
-    } catch (error) {
-
-      console.error(
-        "خطأ في تحميل آخر الفصول:",
-        error
-      );
-
-
-      latestChapters.innerHTML = `
-        <div class="latest-empty">
-          حدث خطأ أثناء تحميل آخر الفصول 🌸
-        </div>
-      `;
-
-    }
-
-  }
-
-
-  // ==========================================
-  // عرض آخر الفصول
-  // ==========================================
-
-  function displayLatestChapters(chapters) {
-
-    latestChapters.innerHTML = "";
-
-
-    if (chapters.length === 0) {
-
-      latestChapters.innerHTML = `
-        <div class="latest-empty">
-          لا توجد فصول مضافة حتى الآن 🌸
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    chapters.forEach((chapter) => {
-
-      const card =
-        document.createElement("div");
-
-
-      card.className =
-        "chapter-card";
-
-
-      card.innerHTML = `
-
-        <div class="chapter-info">
-
-          <div class="chapter-manga">
-            📖 ${chapter.mangaTitle}
-          </div>
-
-          <div class="chapter-name">
-            ${chapter.chapterName}
-          </div>
-
-          ${
-            chapter.dateValue
-              ? `
-                <div class="chapter-date">
-                  🕐 ${new Date(
-                    chapter.dateValue
-                  ).toLocaleDateString(
-                    "ar",
-                    {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric"
-                    }
-                  )}
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-
-
-        <div class="chapter-badge">
-          🆕 قراءة
-        </div>
-
-      `;
-
-
-      // الضغط يفتح المانهوا
-
-      card.addEventListener(
-        "click",
-        () => {
-
-          window.location.href =
-            "manga.html?id=" +
-            encodeURIComponent(
-              chapter.mangaId
-            );
-
-        }
-      );
-
-
-      latestChapters.appendChild(card);
-
-    });
-
-  }
-
-
-  // ==========================================
-  // تحميل المانهوا
-  // ==========================================
-
-  async function loadManga() {
-
-    try {
-
-      const snapshot =
-        await getDocs(
-          collection(db, "manga")
-        );
-
-
-      allManga = [];
-
-
-      snapshot.forEach((item) => {
-
-        allManga.push({
-          id: item.id,
-          ...item.data()
-        });
-
-      });
-
-
-      allManga.sort((a, b) => {
-
-        const dateA =
-          getDateValue(
-            a.createdAt
-          );
-
-        const dateB =
-          getDateValue(
-            b.createdAt
-          );
-
-        return dateB - dateA;
-
-      });
-
-
-      displayManga(allManga);
-
-
-      // بعد تحميل المانهوا نقرأ الفصول
-
-      loadLatestChapters(
-        allManga
-      );
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      mangaList.innerHTML = `
-        <div class="empty">
-          حدث خطأ أثناء تحميل المانهوا 🌸
-        </div>
-      `;
-
-    }
-
-  }
-
-
-  // ==========================================
-  // عرض المانهوا
-  // ==========================================
-
-  function displayManga(list) {
-
-    mangaList.innerHTML = "";
-
-
-    if (list.length === 0) {
-
-      mangaList.innerHTML = `
-        <div class="empty">
-          لم نجد مانهوا بهذا البحث 🌸
-          <br>
-          جربي اسمًا أو تصنيفًا آخر 💗
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    list.forEach((data) => {
-
-      const card =
-        document.createElement("div");
-
-      card.className = "card";
-
-
-      const genres =
-        Array.isArray(data.genres)
-          ? data.genres.join(" • ")
-          : data.genres || "";
-
-
-      const mangaStatus =
-        data.status || "غير محددة";
-
-
-      let statusClass = "";
-
-
-      if (mangaStatus === "مكتملة") {
-
-        statusClass = "completed";
-
-      } else if (mangaStatus === "متوقفة") {
-
-        statusClass = "paused";
-
-      }
-
-
-      card.innerHTML = `
-
-        <div class="cover-wrap">
-
-          ${
-            data.cover
-              ? `
-                <img
-                  src="${data.cover}"
-                  alt="${data.title || "مانهوا"}"
-                  loading="lazy"
-                >
-              `
-              : `
-                <div
-                  style="
-                    height:260px;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-size:50px;
-                  "
-                >
-                  🌸
-                </div>
-              `
-          }
-
-          <div class="status ${statusClass}">
-            ${mangaStatus}
-          </div>
-
-        </div>
-
-
-        <div class="card-content">
-
-          <h3>
-            ${data.title || "بدون اسم"}
-          </h3>
-
-          <div class="description">
-            ${data.description || "لا يوجد وصف."}
-          </div>
-
-          ${
-            genres
-              ? `
-                <div class="genres">
-                  🏷️ ${genres}
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-
-      `;
-
-
-      card.addEventListener("click", () => {
-
-        window.location.href =
-          "manga.html?id=" +
-          encodeURIComponent(data.id);
-
-      });
-
-
-      mangaList.appendChild(card);
-
-    });
-
-  }
-
-
-  // ==========================================
-  // البحث + الفلترة
-  // ==========================================
-
-  function search() {
-
-    const value =
-      searchInput.value
-        .trim()
-        .toLowerCase();
-
-
-    const filtered =
-      allManga.filter((manga) => {
-
-        const title =
-          (manga.title || "")
-            .toLowerCase();
-
-        const description =
-          (manga.description || "")
-            .toLowerCase();
-
-        const genres =
-          Array.isArray(manga.genres)
-            ? manga.genres.join(" ").toLowerCase()
-            : "";
-
-
-        const status =
-          manga.status || "";
-
-
-        const matchesSearch =
-          !value ||
-          title.includes(value) ||
-          description.includes(value) ||
-          genres.includes(value);
-
-
-        const matchesFilter =
-          currentFilter === "all" ||
-          status === currentFilter;
-
-
-        return (
-          matchesSearch &&
-          matchesFilter
-        );
-
-      });
-
-
-    displayManga(filtered);
-
-  }
-
-
-  // ==========================================
-  // زر البحث
-  // ==========================================
-
-  searchButton.addEventListener(
-    "click",
-    search
-  );
-
-
-  // ==========================================
-  // البحث المباشر
-  // ==========================================
-
-  searchInput.addEventListener(
-    "input",
-    search
-  );
-
-
-  // ==========================================
-  // أزرار الحالة
-  // ==========================================
-
-  filterButt
+  <small>  
+    حكايات جميلة تبدأ من هنا 💗  
+  </small>  </footer>  <script type="module">  
+  
+  import { db } from "./firebase.js";  
+  
+  import {  
+    collection,  
+    getDocs  
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
+  
+  
+  const mangaList =  
+    document.getElementById("mangaList");  
+  
+  const searchInput =  
+    document.getElementById("searchInput");  
+  
+  const searchButton =  
+    document.getElementById("searchButton");  
+  
+  const filterButtons =  
+    document.querySelectorAll(".filter-btn");  
+  
+  
+  let allManga = [];  
+  
+  let currentFilter = "all";  
+  
+  
+  // تحميل المانهوا  
+  
+  async function loadManga() {  
+  
+    try {  
+  
+      const snapshot =  
+        await getDocs(  
+          collection(db, "manga")  
+        );  
+  
+  
+      allManga = [];  
+  
+  
+      snapshot.forEach((item) => {  
+  
+        allManga.push({  
+          id: item.id,  
+          ...item.data()  
+        });  
+  
+      });  
+  
+  
+      allManga.sort((a, b) => {  
+  
+        const dateA =  
+          new Date(a.createdAt || 0);  
+  
+        const dateB =  
+          new Date(b.createdAt || 0);  
+  
+        return dateB - dateA;  
+  
+      });  
+  
+  
+      displayManga(allManga);  
+  
+  
+    } catch (error) {  
+  
+      console.error(error);  
+  
+      mangaList.innerHTML = `  
+        <div class="empty">  
+          حدث خطأ أثناء تحميل المانهوا 🌸  
+        </div>  
+      `;  
+  
+    }  
+  
+  }  
+  
+  
+  // عرض المانهوا  
+  
+  function displayManga(list) {  
+  
+    mangaList.innerHTML = "";  
+  
+  
+    if (list.length === 0) {  
+  
+      mangaList.innerHTML = `  
+        <div class="empty">  
+          لم نجد مانهوا بهذا البحث 🌸  
+          <br>  
+          جربي اسمًا أو تصنيفًا آخر 💗  
+        </div>  
+      `;  
+  
+      return;  
+  
+    }  
+  
+  
+    list.forEach((data) => {  
+  
+      const card =  
+        document.createElement("div");  
+  
+      card.className = "card";  
+  
+  
+      const genres =  
+        Array.isArray(data.genres)  
+          ? data.genres.join(" • ")  
+          : data.genres || "";  
+  
+  
+      const mangaStatus =  
+        data.status || "غير محددة";  
+  
+  
+      let statusClass = "";  
+  
+  
+      if (mangaStatus === "مكتملة") {  
+  
+        statusClass = "completed";  
+  
+      } else if (mangaStatus === "متوقفة") {  
+  
+        statusClass = "paused";  
+  
+      }  
+  
+  
+      card.innerHTML = `  
+  
+        <div class="cover-wrap">  
+  
+          ${  
+            data.cover  
+              ? `  
+                <img  
+                  src="${data.cover}"  
+                  alt="${data.title || "مانهوا"}"  
+                  loading="lazy"  
+                >  
+              `  
+              : `  
+                <div  
+                  style="  
+                    height:260px;  
+                    display:flex;  
+                    align-items:center;  
+                    justify-content:center;  
+                    font-size:50px;  
+                  "  
+                >  
+                  🌸  
+                </div>  
+              `  
+          }  
+  
+          <div class="status ${statusClass}">  
+            ${mangaStatus}  
+          </div>  
+  
+        </div>  
+  
+  
+        <div class="card-content">  
+  
+          <h3>  
+            ${data.title || "بدون اسم"}  
+          </h3>  
+  
+          <div class="description">  
+            ${data.description || "لا يوجد وصف."}  
+          </div>  
+  
+          ${  
+            genres  
+              ? `  
+                <div class="genres">  
+                  🏷️ ${genres}  
+                </div>  
+              `  
+              : ""  
+          }  
+  
+        </div>  
+  
+      `;  
+  
+  
+      card.addEventListener("click", () => {  
+  
+        window.location.href =  
+          "manga.html?id=" +  
+          encodeURIComponent(data.id);  
+  
+      });  
+  
+  
+      mangaList.appendChild(card);  
+  
+    });  
+  
+  }  
+  
+  
+  // البحث + الفلترة  
+  
+  function search() {  
+  
+    const value =  
+      searchInput.value  
+        .trim()  
+        .toLowerCase();  
+  
+  
+    const filtered =  
+      allManga.filter((manga) => {  
+  
+        const title =  
+          (manga.title || "")  
+            .toLowerCase();  
+  
+        const description =  
+          (manga.description || "")  
+            .toLowerCase();  
+  
+        const genres =  
+          Array.isArray(manga.genres)  
+            ? manga.genres.join(" ").toLowerCase()  
+            : "";  
+  
+  
+        const status =  
+          manga.status || "";  
+  
+  
+        const matchesSearch =  
+          !value ||  
+          title.includes(value) ||  
+          description.includes(value) ||  
+          genres.includes(value);  
+  
+  
+        const matchesFilter =  
+          currentFilter === "all" ||  
+          status === currentFilter;  
+  
+  
+        return (  
+          matchesSearch &&  
+          matchesFilter  
+        );  
+  
+      });  
+  
+  
+    displayManga(filtered);  
+  
+  }  
+  
+  
+  // زر البحث  
+  
+  searchButton.addEventListener(  
+    "click",  
+    search  
+  );  
+  
+  
+  // البحث المباشر  
+  
+  searchInput.addEventListener(  
+    "input",  
+    search  
+  );  
+  
+  
+  // أزرار الحالة  
+  
+  filterButtons.forEach((button) => {  
+  
+    button.addEventListener(  
+      "click",  
+      () => {  
+  
+        filterButtons.forEach(  
+          (btn) =>  
+            btn.classList.remove("active")  
+        );  
+  
+  
+        button.classList.add("active");  
+  
+  
+        currentFilter =  
+          button.dataset.filter;  
+  
+  
+        search();  
+  
+      }  
+    );  
+  
+  });  
+  
+  
+  // تشغيل الموقع  
+  
+  loadManga();  
+  
+</script>  </body>  
+</html>
